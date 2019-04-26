@@ -1,0 +1,70 @@
+import React, { Component } from "react";
+import { createBottomTabNavigator } from "react-navigation";
+import Icon from "react-native-vector-icons/EvilIcons";
+import Explore from "./components/explore";
+import Save from "./components/save";
+import Notification from "./components/alerts";
+import User from "./components/user";
+//import Status from "./components/compositor";
+
+const Modulo = createBottomTabNavigator(
+  {
+    Explore: {
+      screen: Explore,
+      navigationOptions: {
+        tabBarLabel: "EXPLORAR",
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="search" color={tintColor} size={25} />
+        )
+      }
+    },
+    Salvos: {
+      screen: Save,
+      navigationOptions: {
+        tabBarLabel: "SALVOS",
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="star" color={tintColor} size={25} />
+        )
+      }
+    },
+    Notificação: {
+      screen: Notification,
+      navigationOptions: {
+        tabBarLabel: "ALERTAS",
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="bell" color={tintColor} size={25} />
+        )
+      }
+    },
+    Usuário: {
+      screen: User,
+      navigationOptions: {
+        tabBarLabel: "USUÁRIO",
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="navicon" color={tintColor} size={30} />
+        )
+      }
+    }
+  },
+  {
+    tabBarOptions: {
+      activeTintColor: "#7159c1",
+      inactiveTintColor: "grey",
+
+      style: {
+        backgroundColor: "#fff",
+        borderTopColor: "#7159c1",
+        shadowOffset: { width: 3, height: 10 },
+        shadowColor: "black",
+        shadowOpacity: 0.5,
+        elevation: 5
+      }
+    }
+  },
+  {
+    initialRouteName: "Explore"
+    // StatusBar: { backgroundColor: "#7159c1", barStyle: "light-content" }
+  }
+);
+
+export default Modulo;
