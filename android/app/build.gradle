@@ -148,6 +148,8 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
      //firestore funcionar
     implementation "com.google.firebase:firebase-firestore:18.2.0"
+    //auth functionar
+    implementation "com.google.firebase:firebase-auth:16.2.1"
     //firebase funcionar
     implementation "com.google.android.gms:play-services-base:16.1.0"
     implementation "com.google.firebase:firebase-core:16.0.8"
