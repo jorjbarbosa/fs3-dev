@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "778486481483",
+    "firebase_url": "https://trampos-5b286.firebaseio.com",
+    "project_id": "trampos-5b286",
+    "storage_bucket": "trampos-5b286.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:778486481483:android:c2da6356307773cf",
+        "android_client_info": {
+          "package_name": "com.trampos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "778486481483-pje22b428o65novos3h1u7nr0b2vu0hn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcrDpAw-45eNuPCl-e8fbwXwErOfnugeY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "778486481483-pje22b428o65novos3h1u7nr0b2vu0hn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

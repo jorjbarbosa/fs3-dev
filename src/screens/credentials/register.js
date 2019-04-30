@@ -3,22 +3,44 @@ import {
   Image,
   StyleSheet,
   Dimensions,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
+  Alert
 } from "react-native";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Icon from "react-native-vector-icons/Entypo";
 import { Button, Block, Text, Input } from "../.././components";
 import * as theme from "../.././components/theme";
+
+import {userRegister} from '../../controllers/Register';
+
 class Register extends Component {
+  
   state = {
-    active: null
-  };
+    active: null,
+    isAuthenticated: false,
+    primeiroNome:'',
+    segundoNome:'',
+    email:'',
+    telefone:'',
+    senha:'',
+    erro:''
+  
+  }
 
   handleType = id => {
     const { active } = this.state;
     this.setState({ active: active === id ? null : id });
   };
+  register=()=>{
+    let resul = userRegister(this.state.primeiroNome,
+      this.state.segundoNome,
+      this.state.email,
+      this.state.telefone,
+      this.state.senha);
+    
+    console.log(resul);
+  }
 
   render() {
     const { navigation } = this.props;
@@ -126,26 +148,34 @@ class Register extends Component {
             </TouchableWithoutFeedback>
           </Block>
           <Block center style={{ marginTop: 25 }}>
-            <Input full label="Primeiro Nome" style={{ marginBottom: 25 }} />
-            <Input full label="Segundo Nome" style={{ marginBottom: 25 }} />
+            <Input full label="Primeiro Nome" style={{ marginBottom: 25 }} 
+              onChangeText={((primeiroNome)=>this.setState({primeiroNome}))} value={this.state.primeiroNome}
+              />
+            <Input full label="Segundo Nome" style={{ marginBottom: 25 }} 
+              onChangeText={((segundoNome)=>this.setState({segundoNome}))} value={this.state.segundoNome}
+            />
             <Input
               full
               email
               label="Endereço de Email"
               style={{ marginBottom: 25 }}
+              onChangeText={((email)=>this.setState({email}))} value={this.state.email}
             />
             <Input
               full
               number
               label="Numero de Telefone"
               style={{ marginBottom: 25 }}
+              onChangeText={((telefone)=>this.setState({telefone}))} value={this.state.telefone}
             />
-            <Input full password label="Senha" style={{ marginBottom: 25 }} />
+            <Input full password label="Senha" style={{ marginBottom: 25 }} 
+              onChangeText={((senha)=>this.setState({senha}))} value={this.state.senha}
+            />
 
             <Button
               full
               style={{ marginBottom: 12 }}
-              onPress={() => navigation.navigate("Overview")}
+              onPress={() => this.register()}
             >
               <Text button>Criar Conta</Text>
             </Button>
