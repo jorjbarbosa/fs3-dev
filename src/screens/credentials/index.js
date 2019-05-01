@@ -1,17 +1,34 @@
 import React, { Component } from "react";
-import { StatusBar, Dimensions } from "react-native";
+import { StatusBar, Dimensions,Alert } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Icon from "react-native-vector-icons/Entypo";
 import { Button, Block, Text, Input } from "../../components";
-
+import {userLogin} from "../../controllers/Login";
 const { height } = Dimensions.get("window");
 
+import {errorMessage} from '../../config/Erros';
+import firebase from 'react-native-firebase';
+const db = firebase.firestore();
 /**
  *
  * Este é o codigo do Login,
  *
  */
 class Login extends Component {
+  state = {
+    email:'',
+    senha:''
+  }
+  login=()=>{
+    userLogin(this.state.email,this.state.senha);   
+    firebase.auth().signInWithEmailAndPassword(this.state.email,this.state.senha)
+    .then(()=>{
+      Alert.alert("Foi");
+        //login bem sucedido
+    }).catch((error)=>{
+      Alert.alert(errorMessage(error.code));//aviso de erro
+    });
+  }
   render() {
     const { navigation } = this.props;
     return (
@@ -41,12 +58,15 @@ class Login extends Component {
               Digite suas credenciais.
             </Text>
             <Block center style={{ marginTop: 40 }}>
-              <Input full email label="Email " style={{ marginBottom: 15 }} />
+              <Input full email label="Email " style={{ marginBottom: 15 }}
+               onChangeText={((email)=>this.setState({email}))} value={this.state.email}
+              />
               <Input
                 full
                 password
                 label="Senha"
                 style={{ marginBottom: 25 }}
+                onChangeText={((senha)=>this.setState({senha}))} value={this.state.senha}
                 rightLabel={
                   <Text
                     paragraph
@@ -61,7 +81,7 @@ class Login extends Component {
               <Button
                 full
                 style={{ marginBottom: 12 }}
-                onPress={() => navigation.navigate("Overview")}
+                onPress={() => this.login()}
               >
                 <Text button>Entrar</Text>
               </Button>

@@ -12,7 +12,9 @@ import Icon from "react-native-vector-icons/Entypo";
 import { Button, Block, Text, Input } from "../.././components";
 import * as theme from "../.././components/theme";
 
-import {userRegister} from '../../controllers/Register';
+import {errorMessage} from '../../config/Erros';
+import firebase from 'react-native-firebase';
+const db = firebase.firestore();
 
 class Register extends Component {
   
@@ -23,8 +25,7 @@ class Register extends Component {
     segundoNome:'',
     email:'',
     telefone:'',
-    senha:'',
-    erro:''
+    senha:''
   
   }
 
@@ -33,13 +34,21 @@ class Register extends Component {
     this.setState({ active: active === id ? null : id });
   };
   register=()=>{
-    let resul = userRegister(this.state.primeiroNome,
-      this.state.segundoNome,
-      this.state.email,
-      this.state.telefone,
-      this.state.senha);
-    
-    console.log(resul);
+    firebase.auth()
+        .createUserWithEmailAndPassword(this.state.email,  this.state.senha)
+        .then(function(){
+            user = firebase.auth().currentUser;
+            data = {
+                nome:this.state.primeiroNome,
+                sobrenome:this.state.segundoNome,
+                telefone:this.state.telefone
+            }
+            db.collection('usuario').doc(user.uid).set(data);
+            Alert.alert("Foi");   // redirecionar cadastro bem sucedido      
+        })
+        .catch(error=>{
+            Alert.alert(errorMessage(error.code));//aviso de erro
+        });  
   }
 
   render() {
@@ -68,10 +77,7 @@ class Register extends Component {
     );
 
     return (
-      <KeyboardAwareScrollView
-        style={{ marginVertical: 40 }}
-        showsVerticalScrollIndicator={false}
-      >
+      <KeyboardAwareScrollView style={{ marginVertical: 40 }} showsVerticalScrollIndicator={false}>
         <Block center middle>
           <Icon
             name="tools"

@@ -1,11 +1,7 @@
 import firebase from 'react-native-firebase';
 const db = firebase.firestore();
-
-export const userRegister=(nome,sobrenome,email,telefone,senha) =>{
-    const result = {
-        erro:true,
-        message:''
-    };
+import {Alert} from "react-native";
+export const userRegister= (nome,sobrenome,email,telefone,senha) =>{
     firebase.auth()
         .createUserWithEmailAndPassword(email, senha)
         .then(function(){
@@ -16,11 +12,21 @@ export const userRegister=(nome,sobrenome,email,telefone,senha) =>{
                 telefone:telefone
             }
             db.collection('usuario').doc(user.uid).set(data);
-            result.erro = false;            
+            Alert.alert("Foi");         
         })
         .catch(error=>{
-            result.erro=true;
-            result.message= error.message;
+            Alert.alert(this.errorMessage(error.code));
         });
-    return result;
+}
+errorMessage=(code)=>{
+    switch(code){
+        case 'auth/email-already-in-use':
+            return "Este e-mail já esta cadastrado";
+        case 'auth/invalid-email':
+            return "E-mail inserido não é valido";
+        case 'auth/weak-password':
+            return "Senha Inserida é muito fraca";
+        default:
+            return "Ocorreu um erro inesperado";
+    }
 }
