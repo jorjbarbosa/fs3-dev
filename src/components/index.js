@@ -4,5 +4,6 @@ import Input from "./input";
 import Button from "./button";
 import Card from "./card";
 import Label from "./label";
-
-export { Block, Text, Input, Button, Card, Label };
+import InputMask from "./inputmask";
+import ControlTab from "./controltab";
+export { Block, Text, Input, Button, Card, Label,InputMask,ControlTab };

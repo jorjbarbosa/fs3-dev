@@ -4,78 +4,71 @@ import {
   StyleSheet,
   Dimensions,
   TouchableWithoutFeedback,
-  Alert
+  Alert,
+  View
 } from "react-native";
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Icon from "react-native-vector-icons/Entypo";
-import { Button, Block, Text, Input } from "../.././components";
-import * as theme from "../.././components/theme";
+import { Button, Block, Text, Input, InputMask, ControlTab } from "../.././components";
 
-import {errorMessage} from '../../config/Erros';
+
+import { errorMessage } from '../../config/Erros';
 import firebase from 'react-native-firebase';
 const db = firebase.firestore();
 
 class Register extends Component {
-  
+
   state = {
     active: null,
     isAuthenticated: false,
-    primeiroNome:'',
-    segundoNome:'',
-    email:'',
-    telefone:'',
-    senha:''
-  
+    primeiroNome: '',
+    segundoNome: '',
+    email: '',
+    telefone: '',
+    senha: '',
+    sexo:0,
+    primeiroNomeErr: '',
+    segundoNomeErr: '',
+    emailErr: '',
+    telefoneErr: '',
+    senhaErr: '',
   }
 
-  handleType = id => {
-    const { active } = this.state;
-    this.setState({ active: active === id ? null : id });
-  };
-  register=()=>{
+
+  register = (navigate) => {
+    data = {
+      nome: this.state.primeiroNome,
+      sobrenome: this.state.segundoNome,
+      telefone: this.state.telefone,
+      sexo: this.state.sexo
+    }
     firebase.auth()
-        .createUserWithEmailAndPassword(this.state.email,  this.state.senha)
-        .then(function(){
-            user = firebase.auth().currentUser;
-            data = {
-                nome:this.state.primeiroNome,
-                sobrenome:this.state.segundoNome,
-                telefone:this.state.telefone
-            }
-            db.collection('usuario').doc(user.uid).set(data);
-            Alert.alert("Foi");   // redirecionar cadastro bem sucedido      
-        })
-        .catch(error=>{
-            Alert.alert(errorMessage(error.code));//aviso de erro
-        });  
+      .createUserWithEmailAndPassword(this.state.email, this.state.senha)
+      .then(function () {
+        user = firebase.auth().currentUser;       
+        db.collection('usuario').doc(user.uid).set(data);
+        navigate.navigate("Explore");   // redirecionar cadastro bem sucedido      
+      })
+      .catch(error => {
+        Alert.alert(errorMessage(error.code));//aviso de erro
+      });
   }
-
+  check=(navigate)=>{
+    if(this.state.primeiroNome.trim()!="" &&
+      this.state.segundoNome.trim()!="" &&
+      this.state.telefone.trim()!="" &&
+      this.state.email.trim()!="" &&
+      this.state.senha.trim()!=""
+    ){
+      this.register(navigate);
+    }else{
+      Alert.alert("Preencha os dados corretamente");
+    }
+  }
   render() {
     const { navigation } = this.props;
-    const { active } = this.state;
-
-    const adminIcon = (
-      <Image
-        source={require("../.././assets/images/icons/energy.png")}
-        style={{ height: 16, width: 14 }}
-      />
-    );
-
-    const operatorIcon = (
-      <Image
-        source={require("../.././assets/images/icons/message.png")}
-        style={{ height: 14, width: 14 }}
-      />
-    );
-
-    const checkIcon = (
-      <Image
-        source={require("../.././assets/images/icons/check.png")}
-        style={{ height: 18, width: 18 }}
-      />
-    );
-
+    
     return (
       <KeyboardAwareScrollView style={{ marginVertical: 40 }} showsVerticalScrollIndicator={false}>
         <Block center middle>
@@ -91,97 +84,71 @@ class Register extends Component {
             Cadastre-se
           </Text>
           <Text paragraph color="black3">
-            Tão simples quanto fritar peixe.
+            Tão simples quanto fazer gelo.
           </Text>
-          <Block row style={{ marginHorizontal: 28, marginTop: 40 }}>
-            <TouchableWithoutFeedback
-              onPress={() => this.handleType("prestador")}
-              style={active === "prestador" ? styles.activeBorder : null}
-            >
-              <Block
-                center
-                middle
-                style={[
-                  styles.card,
-                  { marginRight: 20 },
-                  active === "prestador" ? styles.active : null
-                ]}
-              >
-                {active === "prestador" ? (
-                  <Block center middle style={styles.check}>
-                    {checkIcon}
-                  </Block>
-                ) : null}
-                <Block center middle style={styles.icon}>
-                  {adminIcon}
-                </Block>
-                <Text h4 style={{ marginBottom: 11 }}>
-                  Prestador
-                </Text>
-                <Text paragraph center color="black3">
-                  Deixe que outros te encontrem
-                </Text>
-              </Block>
-            </TouchableWithoutFeedback>
-
-            <TouchableWithoutFeedback
-              onPress={() => this.handleType("operator")}
-              style={active === "operator" ? styles.activeBorder : null}
-            >
-              <Block
-                center
-                middle
-                style={[
-                  styles.card,
-                  active === "operator" ? styles.active : null
-                ]}
-              >
-                {active === "operator" ? (
-                  <Block center middle style={styles.check}>
-                    {checkIcon}
-                  </Block>
-                ) : null}
-                <Block center middle style={styles.icon}>
-                  {operatorIcon}
-                </Block>
-                <Text h4 style={{ marginBottom: 11 }}>
-                  Cliente
-                </Text>
-                <Text paragraph center color="black3">
-                  Nós vamos te dar aquele Help
-                </Text>
-              </Block>
-            </TouchableWithoutFeedback>
-          </Block>
           <Block center style={{ marginTop: 25 }}>
-            <Input full label="Primeiro Nome" style={{ marginBottom: 25 }} 
-              onChangeText={((primeiroNome)=>this.setState({primeiroNome}))} value={this.state.primeiroNome}
-              />
-            <Input full label="Segundo Nome" style={{ marginBottom: 25 }} 
-              onChangeText={((segundoNome)=>this.setState({segundoNome}))} value={this.state.segundoNome}
+            <Input
+              full
+              label="Primeiro Nome"
+              style={{ marginBottom: 25 }}
+              onChangeText={((primeiroNome) => this.setState({ primeiroNome }))}
+              value={this.state.primeiroNome}
+            />
+            <Input
+              full
+              label="Segundo Nome"
+              style={{ marginBottom: 25 }}
+              onChangeText={((segundoNome) => this.setState({ segundoNome }))}
+              value={this.state.segundoNome}
+              
             />
             <Input
               full
               email
               label="Endereço de Email"
+              keyboardType="email-address"
+              textContentType="emailAddress"
               style={{ marginBottom: 25 }}
-              onChangeText={((email)=>this.setState({email}))} value={this.state.email}
+              onChangeText={((email) => this.setState({ email }))}
+              value={this.state.email}
+              
+            />
+
+            <InputMask
+              full
+              label="Telefone"
+              mask={'cel-phone'}
+              options={{
+                maskType: 'BRL',
+                withDDD: true
+              }}
+              onChangeText={((telefone) => this.setState({ telefone }))}
+              value={this.state.telefone}
+              style={{ marginBottom: 25 }}
             />
             <Input
               full
-              number
-              label="Numero de Telefone"
+              password
+              label="Senha"
               style={{ marginBottom: 25 }}
-              onChangeText={((telefone)=>this.setState({telefone}))} value={this.state.telefone}
+              onChangeText={((senha) => this.setState({ senha }))}
+              value={this.state.senha}
+              
             />
-            <Input full password label="Senha" style={{ marginBottom: 25 }} 
-              onChangeText={((senha)=>this.setState({senha}))} value={this.state.senha}
+            <ControlTab
+              full
+              label="Sexo"
+              multiple='false'
+              values={['Masculino','Feminino']}
+              selectedIndex={this.state.sexo}
+              onTabPress={((sexo) => this.setState({ sexo }))}
+              style={{ marginBottom: 25 }}
             />
 
             <Button
               full
               style={{ marginBottom: 12 }}
-              onPress={() => this.register()}
+              onPress={() => this.check(navigation)}
             >
               <Text button>Criar Conta</Text>
             </Button>
@@ -205,31 +172,5 @@ class Register extends Component {
 export default Register;
 
 const styles = StyleSheet.create({
-  card: {
-    padding: 20,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    borderRadius: 5,
-    backgroundColor: theme.colors.white
-  },
-  active: {
-    borderColor: theme.colors.blue,
-    shadowOffset: { width: 0, height: 0 },
-    shadowColor: theme.colors.lightblue,
-    shadowRadius: 3,
-    shadowOpacity: 1
-  },
-  icon: {
-    flex: 6,
-    height: 48,
-    width: 48,
-    borderRadius: 48,
-    marginBottom: 15,
-    backgroundColor: theme.colors.lightblue
-  },
-  check: {
-    position: "absolute",
-    right: -9,
-    top: -9
-  }
+
 });

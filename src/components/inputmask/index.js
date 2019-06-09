@@ -1,49 +1,39 @@
 import React, { Component } from "react";
-import { StyleSheet, View, TextInput, Dimensions } from "react-native";
+import { StyleSheet, View, Dimensions } from "react-native";
 import Text from "../text";
 import * as theme from "../theme";
-
+import { TextInputMask } from 'react-native-masked-text';
 const { width } = Dimensions.get("window");
 
-export default class Input extends Component {
+export default class InputMask extends Component {
   render() {
     const {
       label,
-      rightLabel,
       full,
-      email,
-      phone,
-      number,
-      password,
       style,
+      mask,
+      keyboardType,
+      options,
       ...props
     } = this.props;
     const inputStyles = [styles.input, full && styles.full, style];
-
-    const inputType = email
-      ? "email-address"
-      : number
-      ? "numeric"
-      : phone
-      ? "phone-pad"
-      : "default";
-
     return (
       <View>
         <View style={styles.labelContainer}>
           <Text caption medium style={styles.label}>
             {label}
           </Text>
-          {rightLabel}
         </View>
-        <TextInput
+        <TextInputMask
           style={inputStyles}
-          secureTextEntry={password}
+          type={mask}
+          options={options}
           autoCapitalize="none"
-          autoCorrect={false}
-          keyboardType={inputType}
+          keyboardType={keyboardType}
           {...props}
-        />        
+        />
+
+
       </View>
     );
   }
@@ -63,10 +53,6 @@ const styles = StyleSheet.create({
   },
   label: {
     textTransform: "uppercase"
-  },
-  erro: {
-    textTransform: "uppercase",
-    color: theme.colors.red,
   },
   labelContainer: {
     flexDirection: "row",

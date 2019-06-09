@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { StatusBar, Dimensions,Alert } from "react-native";
+import { StatusBar, Dimensions, Alert } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Icon from "react-native-vector-icons/Entypo";
 import { Button, Block, Text, Input } from "../../components";
-import {userLogin} from "../../controllers/Login";
+
 const { height } = Dimensions.get("window");
 
-import {errorMessage} from '../../config/Erros';
+import { errorMessage } from '../../config/Erros';
 import firebase from 'react-native-firebase';
 const db = firebase.firestore();
 /**
@@ -16,18 +16,22 @@ const db = firebase.firestore();
  */
 class Login extends Component {
   state = {
-    email:'',
-    senha:''
+    email: '',
+    senha: ''
   }
-  login=()=>{
-    userLogin(this.state.email,this.state.senha);   
-    firebase.auth().signInWithEmailAndPassword(this.state.email,this.state.senha)
-    .then(()=>{
-      Alert.alert("Foi");
-        //login bem sucedido
-    }).catch((error)=>{
-      Alert.alert(errorMessage(error.code));//aviso de erro
-    });
+  login = (navigate) => {
+    firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.senha)
+      .then(() => {
+        navigate.navigate("Explore");
+      }).catch((error) => {
+        Alert.alert(errorMessage(error.code));//aviso de erro
+      });
+  }
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      if(user)
+        this.props.navigation.navigate('Explore');
+    })
   }
   render() {
     const { navigation } = this.props;
@@ -59,14 +63,14 @@ class Login extends Component {
             </Text>
             <Block center style={{ marginTop: 40 }}>
               <Input full email label="Email " style={{ marginBottom: 15 }}
-               onChangeText={((email)=>this.setState({email}))} value={this.state.email}
+                onChangeText={((email) => this.setState({ email }))} value={this.state.email}
               />
               <Input
                 full
                 password
                 label="Senha"
                 style={{ marginBottom: 25 }}
-                onChangeText={((senha)=>this.setState({senha}))} value={this.state.senha}
+                onChangeText={((senha) => this.setState({ senha }))} value={this.state.senha}
                 rightLabel={
                   <Text
                     paragraph
@@ -81,7 +85,7 @@ class Login extends Component {
               <Button
                 full
                 style={{ marginBottom: 12 }}
-                onPress={() => this.login()}
+                onPress={() => this.login(navigation)}
               >
                 <Text button>Entrar</Text>
               </Button>
