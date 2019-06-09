@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { createBottomTabNavigator } from "react-navigation";
 import Icon from "react-native-vector-icons/EvilIcons";
-import Explore from "./components/explore";
-import Save from "./components/save";
-import Notification from "./components/alerts";
-import User from "./components/user";
+import Explore from "../screens/explore";
+import Save from "../screens/save";
+import Notification from "../screens/alerts";
+import User from "../screens/user";
 //import Status from "./components/compositor";
 
-const Modulo = createBottomTabNavigator(
+export default Modulo = createBottomTabNavigator(
   {
     Explore: {
       screen: Explore,
@@ -67,4 +67,4 @@ const Modulo = createBottomTabNavigator(
   }
 );
 
-export default Modulo;
+

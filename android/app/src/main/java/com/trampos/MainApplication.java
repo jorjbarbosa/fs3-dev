@@ -3,6 +3,10 @@ package com.trampos;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
+import io.invertase.firebase.auth.RNFirebaseAuthPackage; 
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.facebook.react.ReactNativeHost;
@@ -25,8 +29,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFirebasePackage(),
             new VectorIconsPackage(),
-            new RNGestureHandlerPackage()
+            new RNGestureHandlerPackage(),
+            new RNFirebaseFirestorePackage(), // firestore
+             new RNFirebaseAuthPackage()
       );
     }
 
