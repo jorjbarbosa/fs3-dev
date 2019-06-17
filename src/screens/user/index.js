@@ -8,17 +8,12 @@ import firebase from 'react-native-firebase';
 import { errorMessage } from '../../config/Erros';
 export default class User extends Component {
 
-  logout = (navigate)=>{
-    firebase.auth().signOut().then(()=>{
+  logout = (navigate) => {
+    firebase.auth().signOut().then(() => {
       navigate.navigate("Login");
     }).catch((error) => {
       Alert.alert(errorMessage(error.code));//aviso de erro
-    });;
-    // firebase.auth().onAuthStateChanged((user) => {
-    //   if (!user) {
-    //     navigate.navigate("Login");
-    //   }
-    // });
+    });
   }
   render() {
     const { navigation } = this.props;
@@ -39,23 +34,28 @@ export default class User extends Component {
               Minha Conta</Text>
           </Block>
           <Block middle>
-          <Text
+            <Text
               onPress={() => navigation.navigate("RegisterService")}
             >
-            Cadastrar serviço</Text>
+              Cadastrar serviço</Text>
           </Block>
-          <Block middle>
           <Text
-              onPress={() => navigation.navigate("EngagedService")}
-            >Serviços contratados</Text>
-          </Block>
-          <Block middle>
+            onPress={() => navigation.navigate("RegisterService")}
+          >
+            Meus Serviços</Text>
+        </Block>
+        <Block middle>
           <Text
-              onPress={() => this.logout(navigation)}
-            >LogOut</Text>
-          </Block>
+            onPress={() => navigation.navigate("EngagedService")}
+          >Serviços contratados</Text>
+        </Block>
+        <Block middle>
+          <Text
+            onPress={() => this.logout(navigation)}
+          >LogOut</Text>
         </Block>
       </Block>
+      </Block >
     );
   }
 }
