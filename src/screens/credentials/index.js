@@ -27,7 +27,7 @@ class Login extends Component {
         Alert.alert(errorMessage(error.code));//aviso de erro
       });
   }
-  componentDidMount() {
+  componentWillMount() {
     firebase.auth().onAuthStateChanged(user => {
       if(user)
         this.props.navigation.navigate('Explore');
