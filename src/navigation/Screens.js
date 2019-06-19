@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { createBottomTabNavigator } from "react-navigation";
+import { createBottomTabNavigator,createAppContainer } from "react-navigation";
 import Icon from "react-native-vector-icons/EvilIcons";
 import Explore from "../screens/explore";
 import Save from "../screens/save";
 import Notification from "../screens/alerts";
-import User from "../screens/user";
+//import User from "../screens/user";
+import User from "./User";
 //import Status from "./components/compositor";
 
 export default Modulo = createBottomTabNavigator(

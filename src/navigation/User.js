@@ -7,7 +7,7 @@ import RegisterService from "../screens/user/registerservice";
 import RegisterProvider from "../screens/user/registerprovider";
 import EngagedService from "../screens/user/engagedservice";
 import MyServices from "../screens/user/myservices";
-const AppNavigator = createStackNavigator(
+const User = createStackNavigator(
   {
     Index,
     MyAccount,
@@ -23,6 +23,18 @@ const AppNavigator = createStackNavigator(
     }
   }
 );
-const User = createAppContainer(AppNavigator);
+User.navigationOptions=({navigation})=>{
+  let tabBarVisible;
+  if (navigation.state.index > 0) {
+    tabBarVisible = false;
+  }else
+    tabBarVisible=true;
+
+  return {
+    tabBarVisible,
+  };
+}
+
+
 
 export default User;
