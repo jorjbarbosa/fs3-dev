@@ -42,7 +42,8 @@ export default class User extends Component {
           <Text
             onPress={() => navigation.navigate("RegisterService")}
           >
-            Meus Serviços</Text>
+            Meus Serviços
+          </Text>
         </Block>
         <Block middle>
           <Text
@@ -55,7 +56,7 @@ export default class User extends Component {
           >LogOut</Text>
         </Block>
       </Block>
-      </Block >
+
     );
   }
 }
