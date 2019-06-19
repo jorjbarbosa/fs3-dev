@@ -1,13 +1,28 @@
 import React, { Component } from "react";
-import UserBar from "./userbar";
-import { StatusBar, Dimensions, Alert } from "react-native";
-import { Button, Block, Text, Input } from "../../components";
-import { View, StyleSheet } from "react-native";
+import { Alert, StyleSheet, ScrollView, ouchableWithoutFeedback } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Text, Block } from "../../components";
 import firebase from 'react-native-firebase';
-// import { Container } from './styles';
 import { errorMessage } from '../../config/Erros';
+import { throwStatement } from "@babel/types";
+import { sizes, colors } from "../../components/theme";
+//import { } from "react-native-gesture-handler";
 export default class User extends Component {
-
+  constructor() {
+    super();
+    this.ref = firebase.firestore().collection('usuario');
+    this.state = {
+      usuario: '',
+    }
+  }
+  componentWillMount() {
+    user = firebase.auth().currentUser;
+    this.ref.doc(user.uid).get().then(doc => {
+      this.setState({ usuario: doc.data() });
+    }).catch(err => {
+      console.log(err);//avisar falta de conexao
+    });
+  }
   logout = (navigate) => {
     firebase.auth().signOut().then(() => {
       navigate.navigate("Login");
@@ -15,57 +30,125 @@ export default class User extends Component {
       Alert.alert(errorMessage(error.code));//aviso de erro
     });
   }
+  check = (navigate) => {
+    Alert.alert(
+      "ALERTA",
+      "Você será desconectado",
+      [
+        { text: 'Cancelar', onPress: () => console.log('Cancelar pressed') },
+        {
+          text: 'Confirmar',
+          onPress: () => this.logout(navigate)
+        }
+      ]
+    );
+  }
+
   render() {
     const { navigation } = this.props;
     return (
-      <Block>
-        <View>
-          <View>
-            <StatusBar backgroundColor="#772ea2" barStyle="light-content" />
-          </View>
-          <UserBar />
-        </View>
+      <Block >
+        <Block>
+          <Text h3 row style={styles.header}>Configurações</Text>
+        </Block>
 
-        <Block middle>
-          <Block middle>
-            <Text
-              onPress={() => navigation.navigate("MyAccount")}
-            >
-              Minha Conta</Text>
+        <Block
+          center
+          middle
+          style={styles.card}>
+          <Block center middle style={styles.icon}>
           </Block>
-          <Block middle>
-            <Text
-              onPress={() => navigation.navigate("RegisterService")}
-            >
-              Cadastrar serviço</Text>
+          <Text h4 style={{ marginBottom: 11 }}>Olá {this.state.usuario.nome}!</Text>
+          <Text paragraph center color="black3">O que desejas?</Text>
+        </Block>
+
+
+        <ScrollView showsVerticalScrollIndicator={false}>
+
+          <Block style={styles.inputs}>
+            <Block style={styles.label}>
+              <Block row space="between">
+                <Block>
+                  <Text bold>Minha conta</Text>
+                </Block>
+                <Text medium secundary color="purple" onPress={() => navigation.navigate("MyAccount", { usuario: this.state.usuario })} >Edit</Text>
+              </Block>
+            </Block>
           </Block>
-          <Text
-            onPress={() => navigation.navigate("RegisterService")}
-          >
-            Meus Serviços
-          </Text>
-        </Block>
-        <Block middle>
-          <Text
-            onPress={() => navigation.navigate("EngagedService")}
-          >Serviços contratados</Text>
-        </Block>
-        <Block middle>
-          <Text
-            onPress={() => this.logout(navigation)}
-          >LogOut</Text>
-        </Block>
+
+          <Block style={styles.inputs}>
+            <Block style={styles.label}>
+              <Block row space="between">
+                <Block>
+                  <Text bold>Registrar Serviço</Text>
+                </Block>
+                <Text medium secundary color="purple" 
+                  onPress={() => this.state.usuario.prestador
+                    ? navigation.navigate("RegisterService")
+                    :navigation.navigate("RegisterProvider")}
+                >Edit</Text>
+              </Block>
+            </Block>
+          </Block>
+
+          <Block style={styles.inputs}>
+            <Block style={styles.label}>
+              <Block row space="between">
+                <Block>
+                  <Text h4 bold>Serviços Contratados</Text>
+                </Block>
+                <Text medium secundary color="purple" onPress={() => navigation.navigate("EngagedService")}>Edit</Text>
+              </Block>
+            </Block>
+          </Block>
+
+
+          <Block middle style={styles.inputs}>
+            <Block style={styles.label}>
+              <Text h4 bold color="purple" center onPress={() => this.check(navigation)}
+              >Sair</Text>
+            </Block>
+          </Block>
+        </ScrollView>
       </Block>
+
+
 
     );
   }
 }
 
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff"
+  card: {
+    padding: 10,
+    borderWidth: 1,
+    borderColor: colors.blue,
+    borderRadius: 5,
+    backgroundColor: colors.white,
+    marginRight: 80,
+    marginLeft: 80,
+  },
+  icon: {
+    flex: 0,
+    height: 48,
+    width: 48,
+    borderRadius: 48,
+    marginBottom: 15,
+    backgroundColor: colors.lightblue
+  },
+  header: {
+    paddingHorizontal: sizes.base * 2,
+    marginTop: sizes.base * 2
+  },
+  label: {
+    padding: sizes.base * 0.5,
+    backgroundColor: colors.input,
+    borderRadius: 10
+  },
+  inputs: {
+    marginTop: sizes.base * 1,
+    paddingHorizontal: sizes.base * 2,
   }
+
 });

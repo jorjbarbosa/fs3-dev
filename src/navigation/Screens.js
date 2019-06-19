@@ -53,10 +53,10 @@ export default Modulo = createBottomTabNavigator(
 
       style: {
         backgroundColor: "#fff",
-        borderTopColor: "#7159c1",
+        borderTopColor: "#fff",
         shadowOffset: { width: 3, height: 10 },
         shadowColor: "black",
-        shadowOpacity: 0.5,
+        shadowOpacity: 0.2,
         elevation: 5
       }
     }

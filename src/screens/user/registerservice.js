@@ -55,7 +55,8 @@ export default class RegisterService extends Component {
             });
             this.setState({
                 areas: areas,
-                areaAtuacao: areas[0]
+                areaAtuacao: areas[0],
+                load:true
             });
 
 
@@ -67,14 +68,14 @@ export default class RegisterService extends Component {
 
     render() {
         const { navigation } = this.props;
-        // if(!this.state.load){
-        //     return (
-        //     <View>
-        //         <Text>Estou Carregando</Text>
-        //     </View>
-        //     )    
-        // }
-        // else
+        if(!this.state.load){//colocar animação de carregamento
+            return (
+            <View>
+                <Text>Estou Carregando</Text>
+            </View>
+            )    
+        }
+        else
         return (
 
             <KeyboardAwareScrollView style={{ marginVertical: 40 }} showsVerticalScrollIndicator={false}>
@@ -82,17 +83,7 @@ export default class RegisterService extends Component {
                     <Text h3 style={{ marginBottom: 6 }}>
                         Cadastre um serviço
                     </Text>
-                    <Block center style={{ marginTop: 25 }}>
-                    <Block>
-                        <Input
-                            full
-                            label="Descricao"
-                            style={{ marginBottom: 25 }}
-                            onChangeText={((descricao) => this.setState({ descricao }))}
-                            value={this.state.descricao}
-                        />
-                    </Block>
-                        
+                    <Block center style={{ marginTop: 25 }}>                        
                         <Input
                             full
                             label="Descricao"
@@ -127,16 +118,6 @@ export default class RegisterService extends Component {
                                 })
                             }
                         </Picker>
-                        <Input
-                            full
-                            email
-                            label="Area de atuação"
-                            textContentType="emailAddress"
-                            style={{ marginBottom: 25 }}
-                            onChangeText={((email) => this.setState({ email }))}
-                            value={this.state.email}
-
-                        />
 
                         <ControlTab //forma de pagamento
                             full
