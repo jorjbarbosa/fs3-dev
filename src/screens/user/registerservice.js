@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { Text, View } from 'react-native'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button, Block, Text, Input, InputMask, ControlTab } from "../.././components";
 
 
-import { errorMessage } from '../../config/Erros';
+//import { errorMessage } from '../../config/Erros';
 export default class RegisterService extends Component {
     state = {
         descricao: '',
@@ -63,7 +62,7 @@ export default class RegisterService extends Component {
                         <InputMask
                             full
                             label="Preço"
-                            mask={'Money'}
+                            mask={'money'}
                             options={{
                                 precision: 2,
                                 separator: ',',

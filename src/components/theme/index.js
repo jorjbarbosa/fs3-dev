@@ -21,11 +21,17 @@ const colors = {
 };
 
 const sizes = {
+  // global sizes
+  base: 16,
+  radius: 6,
+  padding: 25,
+
   font: 15,
   h1: 48,
   h2: 34,
   h3: 28,
   h4: 15,
+
   paragraph: 15,
   caption: 13,
   captionMedium: 12
