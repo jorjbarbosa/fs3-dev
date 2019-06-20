@@ -14,6 +14,7 @@ export default class InputMask extends Component {
       mask,
       keyboardType,
       options,
+      reference,
       ...props
     } = this.props;
     const inputStyles = [styles.input, full && styles.full, style];
@@ -30,6 +31,7 @@ export default class InputMask extends Component {
           options={options}
           autoCapitalize="none"
           keyboardType={keyboardType}
+          ref={reference}
           {...props}
         />
 

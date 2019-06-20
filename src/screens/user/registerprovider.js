@@ -11,13 +11,16 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Icon from "react-native-vector-icons/Entypo";
 import { Button, Block, Text, Input, InputMask, ControlTab } from "../.././components";
-
+import { TextInputMask } from 'react-native-masked-text';
 
 import { errorMessage } from '../../config/Erros';
 import firebase from 'react-native-firebase';
+
 export default class RegisterProvider extends Component {
     constructor() {
         super();
+        var cpfField;
+        var cnpjField;
         this.state = {
             registroGeral: '',
             cpf: '',
@@ -28,27 +31,68 @@ export default class RegisterProvider extends Component {
             load: true,
         }
     }
-
-    render() {
-        const pessoaFisica = <Input
+    displayCPF() {
+        return (<InputMask
+            key='cpf'
             full
+            keyboardType="number-pad"
             label="CPF"
-            style={{ marginBottom: 25 }}
+            placeholder="cpf"
+            mask={'cpf'}
             onChangeText={((cpf) => this.setState({ cpf }))}
             value={this.state.cpf}
-        />;
-        const pessoaJuridica = <Input
-            full
-            label="cnpj"
             style={{ marginBottom: 25 }}
+            reference={((ref) => this.cpfField = ref)}
+        />);
+    }
+    displayCNPJ() {
+        return (<InputMask
+            key='cnpj'
+            full
+            keyboardType="number-pad"
+            label="CNPJ"
+            mask={'cnpj'}
             onChangeText={((cnpj) => this.setState({ cnpj }))}
             value={this.state.cnpj}
-        />;
+            style={{ marginBottom: 25 }}
+            reference={((ref) => this.cnpjField = ref)}
+        />)
+    }
+    check = (navigate) => {
+        data=[];
+        if (
+            this.state.registroGeral.trim() != "" && !isNaN(this.state.registroGeral) &&
+            ((this.state.tipoPessoa == 0 && this.cpfField.isValid()) ||
+             (this.state.tipoPessoa == 1 && this.cnpjField.isValid()))
+
+        ) {
+            if(this.state.tipoPessoa==0){
+                data={
+                    rg:this.state.registroGeral,
+                    tipoPessoa:true,
+                    cpf:this.state.cpf,
+                    certificacoes:this.state.certificacoes.trim()!=""?this.state.certificacoes:"Nenhuma"
+                }
+            }else{
+                data={
+                    rg:this.state.registroGeral,
+                    tipoPessoa:false,
+                    cnpj:this.state.cpf,
+                    certificacoes:this.state.certificacoes.trim()!=""?this.state.certificacoes:"Nenhuma"
+                }
+            }
+            navigate.navigate('RegisterService',data);
+        } else {
+            Alert.alert("Preencha os dados corretamente");
+        }
+    }
+    render() {
+        const { navigation } = this.props;
         return (
             <KeyboardAwareScrollView style={{ marginVertical: 40 }} showsVerticalScrollIndicator={false}>
                 <Block center>
                     <Text h3 style={{ marginBottom: 6 }}>
-                       Insira seus dados
+                        Insira seus dados
                     </Text>
                     <Text paragraph color="black3">
                         Suas informações estão seguras, não se preocupe
@@ -56,6 +100,7 @@ export default class RegisterProvider extends Component {
                     <Block center style={{ marginTop: 25 }}>
                         <Input
                             full
+                            keyboardType="number-pad"
                             label="RG"
                             style={{ marginBottom: 25 }}
                             onChangeText={((registroGeral) => this.setState({ registroGeral }))}
@@ -70,18 +115,14 @@ export default class RegisterProvider extends Component {
                             onTabPress={((tipoPessoa) => this.setState({ tipoPessoa }))}
                             style={{ marginBottom: 25 }}
                         />
-                        {this.state.tipoPessoa==0?pessoaFisica:pessoaJuridica}
+                        {this.state.tipoPessoa == 0 ? this.displayCPF() :this.displayCNPJ()}
                         <Input
                             full
-                            password
                             label="Certificacoes"
                             style={{ marginBottom: 25 }}
                             onChangeText={((certificacoes) => this.setState({ certificacoes }))}
                             value={this.state.certificacoes}
-
                         />
-
-
                         <Button
                             full
                             style={{ marginBottom: 12 }}

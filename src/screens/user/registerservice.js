@@ -10,24 +10,36 @@ import firebase from 'react-native-firebase';
 const googleApiKey = "AIzaSyCcrDpAw-45eNuPCl-e8fbwXwErOfnugeY";
 export default class RegisterService extends Component {
     constructor() {
-        super();
+        super(); 
         this.ref = firebase.firestore().collection('areas');
+        var precoField;
         this.state = {
             descricao: '',
             cidade: '',
+            estado:'',
             areaAtuacao: [],
             areas: [],
-            pagamento: '',
+            pagamento: 0,
             preco: '',
             error: '',
             load: true,
         }
     }
     check = (navigator) => {
-
+       if(this.state.descricao.trim()!="" && this.state.cidade.trim()!="" && this.state.estado.trim()!="" &&
+        this.state.areaAtuacao.key!=-1 && this.precoField.getRawValue()>0){
+            Alert.alert("Ta ok");
+        }else{
+            Alert.alert("Preencha os dados corretamente");
+        }
     }
     componentWillMount() {
-        const areas = [];
+        const areas=[];
+        areas.push({
+            key:-1,
+            nome:"Selecione"
+        });
+      
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + position.coords.latitude + ',' + position.coords.longitude + '&key=' + googleApiKey
@@ -36,6 +48,9 @@ export default class RegisterService extends Component {
                         responseJson.results[0].address_components.forEach(component => {
                             if (component.types.indexOf('administrative_area_level_2') != -1) {
                                 this.setState({ cidade: component.long_name });
+                            }
+                            if(component.types.indexOf('administrative_area_level_1')!=-1){
+                                this.setState({ estado: component.short_name });
                             }
                         });
                     });
@@ -64,10 +79,9 @@ export default class RegisterService extends Component {
 
     }
 
-
-
     render() {
         const { navigation } = this.props;
+        
         if(!this.state.load){//colocar animação de carregamento
             return (
             <View>
@@ -124,13 +138,14 @@ export default class RegisterService extends Component {
                             label="Forma de pagamento"
                             multiple='false'
                             values={['Dinheiro', 'Cartão']}
-                            selectedIndex={this.state.sexo}
-                            onTabPress={((sexo) => this.setState({ sexo }))}
+                            selectedIndex={this.state.pagamento}
+                            onTabPress={((pagamento) => this.setState({ pagamento }))}
                             style={{ marginBottom: 25 }}
                         />
                         <InputMask
                             full
                             label="Preço"
+                            keyboardType="number-pad"
                             mask={'money'}
                             options={{
                                 precision: 2,
@@ -142,6 +157,7 @@ export default class RegisterService extends Component {
                             onChangeText={((preco) => this.setState({ preco }))}
                             value={this.state.preco}
                             style={{ marginBottom: 25 }}
+                            reference={((ref) => this.precoField = ref)}
                         />
                         <Button
                             full
