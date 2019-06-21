@@ -84,13 +84,26 @@ export default class User extends Component {
                 </Block>
                 <Text medium secundary color="purple" 
                   onPress={() => this.state.usuario.prestador
-                    ? navigation.navigate("RegisterService")
-                    :navigation.navigate("RegisterProvider")}
+                    ? navigation.navigate("RegisterService",{usuario:this.state.usuario.prestador})
+                    :navigation.navigate("RegisterProvider",{usuario:this.state.usuario.prestador})}
                 >Edit</Text>
               </Block>
             </Block>
           </Block>
-
+          {this.state.usuario.prestador?[
+            <Block style={styles.inputs}>
+              <Block style={styles.label}>
+                <Block row space="between">
+                  <Block>
+                    <Text bold>Serviços Registrados</Text>
+                  </Block>
+                  <Text medium secundary color="purple" 
+                    onPress={() => navigation.navigate("MyServices")}
+                  >Edit</Text>
+                </Block>
+              </Block>
+            </Block>
+          ]:null}
           <Block style={styles.inputs}>
             <Block style={styles.label}>
               <Block row space="between">

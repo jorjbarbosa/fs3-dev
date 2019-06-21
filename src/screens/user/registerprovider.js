@@ -69,9 +69,9 @@ export default class RegisterProvider extends Component {
              (this.state.tipoPessoa == 1 && this.cnpjField.isValid()))
 
         ) {
-            //validação de cpf ou cnpj existente
             if(this.state.tipoPessoa==0){
                 data={
+                    prestador:navigate.state.params.prestador,
                     rg:this.state.registroGeral,
                     tipoPessoa:true,
                     cpf:this.cpfField.getRawValue(),
@@ -79,6 +79,7 @@ export default class RegisterProvider extends Component {
                 }
             }else{
                 data={
+                    prestador:navigate.state.params.prestador,
                     rg:this.state.registroGeral,
                     tipoPessoa:false,
                     cnpj:this.cnpjField.getRawValue(),
@@ -87,7 +88,15 @@ export default class RegisterProvider extends Component {
             }
             navigate.navigate('RegisterService',data);
         } else {
-            Alert.alert("Preencha os dados corretamente");
+            Alert.alert(
+                "Aviso",
+                "Preencha os dados corretamente",
+                [
+                  {
+                    text: 'OK'
+                  }
+                ]
+              );
         }
     }
     render() {

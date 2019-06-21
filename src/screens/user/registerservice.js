@@ -13,7 +13,7 @@ export default class RegisterService extends Component {
     constructor() {
         super();
         this.refArea = firebase.firestore().collection('areas');
-        
+
         var precoField;
         this.state = {
             descricao: '',
@@ -29,8 +29,8 @@ export default class RegisterService extends Component {
     }
     check = (navigator) => {
         if (this.state.descricao.trim() != "" && this.state.cidade.trim() != "" && this.state.estado.trim() != "" &&
-            this.state.areaAtuacao.key != -1 && this.precoField.getRawValue() > 0 && this.state.pagamento.length>0) {
-            
+            this.state.areaAtuacao.key != -1 && this.precoField.getRawValue() > 0 && this.state.pagamento.length > 0) {
+
             var servico = {
                 proprietario: firebase.auth().currentUser.uid,
                 descricao: this.state.descricao,
@@ -41,44 +41,72 @@ export default class RegisterService extends Component {
                 area: this.state.areaAtuacao.key,
                 preco: this.precoField.getRawValue(),
                 pagamento: {
-                    dinheiro:this.state.pagamento.includes(0),
-                    cartao:this.state.pagamento.includes(1)
+                    dinheiro: this.state.pagamento.includes(0),
+                    cartao: this.state.pagamento.includes(1)
                 },
-                nota:0
+                nota: 0
             }
-           
-            if(navigator.state.params.tipoPessoa){
-                user={
-                    prestador:true,
-                    dados:{
-                        certificacoes:navigator.state.params.certificacoes,
-                        rg:navigator.state.params.rg,
-                        tipoPessoa:true,
-                        cpf:navigator.state.params.cpf
+            if (!navigator.state.params.prestador) {
+                if (navigator.state.params.tipoPessoa) {
+                    user = {
+                        prestador: true,
+                        dados: {
+                            certificacoes: navigator.state.params.certificacoes,
+                            rg: navigator.state.params.rg,
+                            tipoPessoa: true,
+                            cpf: navigator.state.params.cpf
+                        }
+                    }
+                } else {
+                    user = {
+                        prestador: true,
+                        dados: {
+                            certificacoes: navigator.state.params.certificacoes,
+                            rg: navigator.state.params.rg,
+                            tipoPessoa: false,
+                            cnpj: navigator.state.params.cpf
+                        }
                     }
                 }
-            }else{
-                user={
-                    prestador:true,
-                    dados:{
-                        certificacoes:navigator.state.params.certificacoes,
-                        rg:navigator.state.params.rg,
-                        tipoPessoa:false,
-                        cnpj:navigator.state.params.cpf
-                    }
-                }
             }
-            try{
-                db.collection('usuario').doc(firebase.auth().currentUser.uid).update(user);
+            try {
+                navigator.state.params.prestador?null:db.collection('usuario').doc(firebase.auth().currentUser.uid).update(user);
                 db.collection('servicos').doc().set(servico);
-            }catch(error){
+                Alert.alert(
+                    "Aviso",
+                    "Serviço registrado com sucesso",
+                    [
+                        {
+                            text: 'OK'
+                        }
+                    ]
+                );
+            } catch (error) {
                 console.log(error)
-                Alert.alert(errorMessage(error.code));//aviso de erro
+                Alert.alert(
+                    "Aviso",
+                    errorMessage(error.code),
+                    [
+                        {
+                            text: 'Cancelar'
+                        },
+                        {
+                            text:"Tentar novamente",
+                            onPress:()=>this.check(navigator)
+                        }
+                    ]
+                );
             };
-            console.log(servico);
-
         } else {
-            Alert.alert("Preencha os dados corretamente");
+            Alert.alert(
+                "Aviso",
+                "Preencha os dados corretamente",
+                [
+                    {
+                        text: 'OK'
+                    }
+                ]
+            );
         }
     }
     componentWillMount() {
