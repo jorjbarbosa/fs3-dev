@@ -16,6 +16,7 @@ import { TextInputMask } from 'react-native-masked-text';
 import { errorMessage } from '../../config/Erros';
 import firebase from 'react-native-firebase';
 
+db = firebase.firestore();
 export default class RegisterProvider extends Component {
     constructor() {
         super();
@@ -37,7 +38,7 @@ export default class RegisterProvider extends Component {
             full
             keyboardType="number-pad"
             label="CPF"
-            placeholder="cpf"
+            placeholder="CPF"
             mask={'cpf'}
             onChangeText={((cpf) => this.setState({ cpf }))}
             value={this.state.cpf}
@@ -50,6 +51,7 @@ export default class RegisterProvider extends Component {
             key='cnpj'
             full
             keyboardType="number-pad"
+            placeholder="CNPJ"
             label="CNPJ"
             mask={'cnpj'}
             onChangeText={((cnpj) => this.setState({ cnpj }))}
@@ -60,24 +62,26 @@ export default class RegisterProvider extends Component {
     }
     check = (navigate) => {
         data=[];
+        var count=0;
         if (
             this.state.registroGeral.trim() != "" && !isNaN(this.state.registroGeral) &&
             ((this.state.tipoPessoa == 0 && this.cpfField.isValid()) ||
              (this.state.tipoPessoa == 1 && this.cnpjField.isValid()))
 
         ) {
+            //validação de cpf ou cnpj existente
             if(this.state.tipoPessoa==0){
                 data={
                     rg:this.state.registroGeral,
                     tipoPessoa:true,
-                    cpf:this.state.cpf,
+                    cpf:this.cpfField.getRawValue(),
                     certificacoes:this.state.certificacoes.trim()!=""?this.state.certificacoes:"Nenhuma"
                 }
             }else{
                 data={
                     rg:this.state.registroGeral,
                     tipoPessoa:false,
-                    cnpj:this.state.cpf,
+                    cnpj:this.cnpjField.getRawValue(),
                     certificacoes:this.state.certificacoes.trim()!=""?this.state.certificacoes:"Nenhuma"
                 }
             }
@@ -109,7 +113,6 @@ export default class RegisterProvider extends Component {
                         <ControlTab
                             full
                             label="Tipo"
-                            multiple='false'
                             values={['Pessoa Fisica', 'Pessoa Juridica']}
                             selectedIndex={this.state.tipoPessoa}
                             onTabPress={((tipoPessoa) => this.setState({ tipoPessoa }))}

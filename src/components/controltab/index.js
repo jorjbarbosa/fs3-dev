@@ -14,6 +14,8 @@ export default class ControlTab extends Component {
             onTabPress,
             values,
             selectedIndex,
+            multiples,
+            selectedIndices,
             ...props
         } = this.props;
 
@@ -32,8 +34,10 @@ export default class ControlTab extends Component {
                     tabTextStyle={styles.tabTextStyle}
                     activeTabStyle={styles.activeTabStyle}
                     activeTabTextStyle={styles.activeTabTextStyle}
+                    multiple={multiples}
                     values={values}
                     selectedIndex={selectedIndex}
+                    selectedIndices={selectedIndices}
                     onTabPress={onTabPress}
                     style={style}
                 />
