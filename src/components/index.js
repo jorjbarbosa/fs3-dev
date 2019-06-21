@@ -5,5 +5,6 @@ import Button from "./button";
 import Card from "./card";
 import Label from "./label";
 import InputMask from "./inputmask";
+import TInput from "./textInput";
 import ControlTab from "./controltab";
-export { Block, Text, Input, Button, Card, Label, InputMask, ControlTab };
+export { Block, Text, Input, Button, Card, Label, InputMask, ControlTab, TInput };
