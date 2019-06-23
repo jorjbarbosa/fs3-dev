@@ -4,7 +4,7 @@ import { Text, Block, Input } from "../../components";
 import firebase from 'react-native-firebase';
 import { sizes, colors } from "../../components/theme";
 
-export default class MyAccount extends Component {
+export default class EditAccount extends Component {
     constructor() {
         super();
         this.ref = firebase.firestore().collection('usuario');
@@ -12,15 +12,11 @@ export default class MyAccount extends Component {
             usuario: '',
         }
     }
-    componentWillMount() {
-        user = firebase.auth().currentUser;
-        this.ref.doc(user.uid).get().then(doc => {
-            this.setState({ usuario: doc.data() });
-        }).catch(err => {
-            console.log(err);//avisar falta de conexao
-        });
+    componentWillMount(){
+        this.setState({ usuario: this.props.navigation.state.params.usuario});
     }
     render() {
+        const { navigation } = this.props;
         return (
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Block >
@@ -43,18 +39,18 @@ export default class MyAccount extends Component {
                             </Block>
                             <Block center middle>
                                 <Text h4 color="black3" >Sobrenome</Text>
-                                <Input />
+                                <Input style={{ marginRight: 3, marginBottom: 3 }} >{this.state.usuario.sobrenome}</Input>
                             </Block>
                         </Block>
 
                         <Block row style={styles.profile}>
                             <Block center middle>
                                 <Text paragraph color="black3"  >Contato</Text>
-                                <Input style={{ marginRight: 3, marginBottom: 3 }} />
+                                <Input style={{ marginRight: 3, marginBottom: 3 }} >{this.state.usuario.contato}</Input>
                             </Block>
                             <Block center middle>
                                 <Text h4 color="black3" >Email</Text>
-                                <Input />
+                                <Input style={{ marginRight: 3, marginBottom: 3 }} >{firebase.auth().currentUser.email}</Input>
                             </Block>
                         </Block>
 
@@ -65,7 +61,7 @@ export default class MyAccount extends Component {
                             </Block>
                             <Block center middle>
                                 <Text h4 color="black3" >Senha</Text>
-                                <Input />
+                                <Input style={{ marginRight: 3, marginBottom: 3 }} >{firebase.auth().currentUser.password}</Input>
                             </Block>
                         </Block>
 

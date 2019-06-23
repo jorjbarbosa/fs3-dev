@@ -94,7 +94,7 @@ export default class User extends Component {
               </Block>
             </Block>
           </Block>
-
+ 
           <Block style={styles.inputs}>
             <Block style={styles.label}>
               <Block row space="between">

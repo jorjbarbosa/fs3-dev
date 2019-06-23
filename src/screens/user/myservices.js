@@ -17,10 +17,10 @@ export default class MyServices extends Component {
       load: true
     }
   }
-  componentDidMount() {
+  componentWillMount() {
     const services = [];
     const userRef = this.refUsuario.doc(firebase.auth().currentUser.uid);
-    
+    console.log(userRef);
     this.refServicos.where('proprietario', '==',userRef).get().then(snapshot => {
       snapshot.forEach(doc => {
         const { descricao, cidade, areaAtuacao, preco } = doc.data();
@@ -74,6 +74,9 @@ export default class MyServices extends Component {
               </View>
               <View>
                 <Text style={styles.item}>Preco {item.preco}</Text>
+              </View>
+              <View>
+                <Text style={styles.item}>Nota {item.preco}</Text>
               </View>
               <View>
                 <Text style={styles.item}>Editar</Text>

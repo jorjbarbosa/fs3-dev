@@ -12,15 +12,12 @@ export default class MyAccount extends Component {
             usuario: '',
         }
     }
-    componentWillMount() {
-        user = firebase.auth().currentUser;
-        this.ref.doc(user.uid).get().then(doc => {
-            this.setState({ usuario: doc.data() });
-        }).catch(err => {
-            console.log(err);//avisar falta de conexao
-        });
+    componentDidMount(){
+        this.setState({ usuario: this.props.navigation.state.params.usuario});
     }
     render() {
+        const { navigation } = this.props;
+        
         return (
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Block >
@@ -43,35 +40,32 @@ export default class MyAccount extends Component {
                             </Block>
                             <Block center middle>
                                 <Text h4 color="black3" >Sobrenome</Text>
-                                <Text paragraph >Galvão</Text>
+                                <Text paragraph >{this.state.usuario.sobrenome}</Text>
                             </Block>
                         </Block>
 
                         <Block row style={styles.profile}>
                             <Block center middle>
                                 <Text paragraph color="black3"  >Contato</Text>
-                                <Text paragraph   >123456789-</Text>
+                                <Text paragraph   >{this.state.usuario.telefone}</Text>
                             </Block>
                             <Block center middle>
                                 <Text h4 color="black3" >Email</Text>
-                                <Text paragraph >test@gmail.com</Text>
+                                <Text paragraph >{firebase.auth().currentUser.email}</Text>
                             </Block>
                         </Block>
 
                         <Block row style={styles.profile}>
                             <Block center middle>
                                 <Text paragraph color="black3"  >Sexo</Text>
-                                <Text paragraph   >homi ou rapariga</Text>
+                                <Text paragraph >{this.state.usuario.sexo==0?"Masculino":"Feminino"}</Text>
                             </Block>
-                            <Block center middle>
-                                <Text h4 color="black3" >Senha</Text>
-                                <Text paragraph >********</Text>
-                            </Block>
+                            
                         </Block>
 
                         <Block middle style={styles.inputs}>
                             <Block style={styles.label}>
-                                <Text h4 bold color="purple" center onPress={() => navigation.navigate("editaccont")}
+                                <Text h4 bold color="purple" center onPress={() => navigation.navigate("EditAccount",{usuario:this.state.usuario})}
                                 >Alterar Dados</Text>
                             </Block>
                         </Block>

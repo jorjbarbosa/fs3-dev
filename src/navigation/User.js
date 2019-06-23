@@ -7,6 +7,7 @@ import RegisterService from "../screens/user/registerservice";
 import RegisterProvider from "../screens/user/registerprovider";
 import EngagedService from "../screens/user/engagedservice";
 import MyServices from "../screens/user/myservices";
+import EditAccount from "../screens/user/editaccont";
 const User = createStackNavigator(
   {
     Index,
@@ -14,7 +15,8 @@ const User = createStackNavigator(
     RegisterService,
     RegisterProvider,
     EngagedService,
-    MyServices
+    MyServices,
+    EditAccount
 
   },
   {
