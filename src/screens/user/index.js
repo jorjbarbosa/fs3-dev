@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { Alert, StyleSheet, ScrollView, ouchableWithoutFeedback } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Alert, StyleSheet, ScrollView } from "react-native";
+import Icon from "react-native-vector-icons/EvilIcons";
 import { Text, Block } from "../../components";
 import firebase from 'react-native-firebase';
 import { errorMessage } from '../../config/Erros';
-import { throwStatement } from "@babel/types";
 import { sizes, colors } from "../../components/theme";
 //import { } from "react-native-gesture-handler";
 export default class User extends Component {
@@ -43,20 +42,37 @@ export default class User extends Component {
       ]
     );
   }
-
+  isPrestador = (navigation) => {
+    if (!this.state.usuario.prestador) {
+      return (
+        <Block style={styles.inputs}>
+          <Block style={styles.label}>
+            <Block row space="between">
+              <Icon name="trophy" color="purple" size={30} />
+              <Block>
+                <Text h4 bold onPress={() => navigation.navigate("MyServices")}>Serviços Registrados</Text>
+              </Block>
+              <Text medium secundary color="purple" onPress={() => navigation.navigate("MyServices")}>
+                <Icon name="chevron-right" color="purple" size={25} /></Text>
+            </Block>
+          </Block>
+        </Block>
+      )
+    }
+  }
   render() {
     const { navigation } = this.props;
     return (
       <Block >
         <Block>
-          <Text h3 row style={styles.header}>Configurações</Text>
+          <Text h3 weight="bold" row style={styles.header}>Configurações</Text>
         </Block>
 
         <Block
           center
           middle
           style={styles.card}>
-          <Block center middle style={styles.icon}>
+          <Block center middle style={styles.icon} >
           </Block>
           <Text h4 style={{ marginBottom: 11 }}>Olá {this.state.usuario.nome}!</Text>
           <Text paragraph center color="black3">O que desejas?</Text>
@@ -67,11 +83,14 @@ export default class User extends Component {
 
           <Block style={styles.inputs}>
             <Block style={styles.label}>
-              <Block row space="between">
-                <Block>
-                  <Text bold>Minha conta</Text>
+              <Block row space="between" >
+                <Icon name="user" color="purple" size={30} />
+                <Block >
+                  <Text bold onPress={() => navigation.navigate("MyAccount", { usuario: this.state.usuario })}>Minha conta</Text>
                 </Block>
-                <Text medium secundary color="purple" onPress={() => navigation.navigate("MyAccount", { usuario: this.state.usuario })} >Edit</Text>
+                <Text medium secundary color="purple" onPress={() => navigation.navigate("MyAccount", { usuario: this.state.usuario })} >
+                  <Icon name="chevron-right" color="purple" size={25} />
+                </Text>
               </Block>
             </Block>
           </Block>
@@ -79,38 +98,30 @@ export default class User extends Component {
           <Block style={styles.inputs}>
             <Block style={styles.label}>
               <Block row space="between">
+                <Icon name="pencil" color="purple" size={30} />
                 <Block>
-                  <Text bold>Registrar Serviço</Text>
+                  <Text bold onPress={() => this.state.usuario.prestador
+                    ? navigation.navigate("RegisterService", { usuario: this.state.usuario.prestador })
+                    : navigation.navigate("RegisterProvider", { usuario: this.state.usuario.prestador })}>Registrar Serviço</Text>
                 </Block>
-                <Text medium secundary color="purple" 
-                  onPress={() => this.state.usuario.prestador
-                    ? navigation.navigate("RegisterService",{usuario:this.state.usuario.prestador})
-                    :navigation.navigate("RegisterProvider",{usuario:this.state.usuario.prestador})}
-                >Edit</Text>
+                <Text medium secundary color="purple" onPress={() => this.state.usuario.prestador
+                  ? navigation.navigate("RegisterService", { usuario: this.state.usuario.prestador })
+                  : navigation.navigate("RegisterProvider", { usuario: this.state.usuario.prestador })}>
+                  <Icon name="chevron-right" color="purple" size={25} />
+                </Text>
               </Block>
             </Block>
           </Block>
-          {this.state.usuario.prestador?[
-            <Block style={styles.inputs}>
-              <Block style={styles.label}>
-                <Block row space="between">
-                  <Block>
-                    <Text bold>Serviços Registrados</Text>
-                  </Block>
-                  <Text medium secundary color="purple" 
-                    onPress={() => navigation.navigate("MyServices")}
-                  >Edit</Text>
-                </Block>
-              </Block>
-            </Block>
-          ]:null}
+          {this.isPrestador(navigation)}
           <Block style={styles.inputs}>
             <Block style={styles.label}>
               <Block row space="between">
+                <Icon name="trophy" color="purple" size={30} />
                 <Block>
-                  <Text h4 bold>Serviços Contratados</Text>
+                  <Text h4 bold onPress={() => navigation.navigate("EngagedService")}>Serviços Contratados</Text>
                 </Block>
-                <Text medium secundary color="purple" onPress={() => navigation.navigate("EngagedService")}>Edit</Text>
+                <Text medium secundary color="purple" onPress={() => navigation.navigate("EngagedService")}>
+                  <Icon name="chevron-right" color="purple" size={25} /></Text>
               </Block>
             </Block>
           </Block>
@@ -157,7 +168,7 @@ const styles = StyleSheet.create({
   label: {
     padding: sizes.base * 0.5,
     backgroundColor: colors.input,
-    borderRadius: 10
+    borderRadius: 2
   },
   inputs: {
     marginTop: sizes.base * 1,

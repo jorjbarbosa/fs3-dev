@@ -32,13 +32,13 @@ export default class RegisterService extends Component {
             this.state.areaAtuacao.key != -1 && this.precoField.getRawValue() > 0 && this.state.pagamento.length > 0) {
 
             var servico = {
-                proprietario: firebase.auth().currentUser.uid,
+                proprietario: 'usuario/'+firebase.auth().currentUser.uid,
                 descricao: this.state.descricao,
                 localizacao: {
                     cidade: this.state.cidade,
                     estado: this.state.estado
                 },
-                area: this.state.areaAtuacao.key,
+                area:'areas/'+this.state.areaAtuacao.key,
                 preco: this.precoField.getRawValue(),
                 pagamento: {
                     dinheiro: this.state.pagamento.includes(0),

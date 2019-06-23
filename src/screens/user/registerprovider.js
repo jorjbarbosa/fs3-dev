@@ -10,7 +10,7 @@ import {
 
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Icon from "react-native-vector-icons/Entypo";
-import { Button, Block, Text, Input, InputMask, ControlTab } from "../.././components";
+import { Button, Block, Text, Input, InputMask, ControlTab, TInput } from "../.././components";
 import { TextInputMask } from 'react-native-masked-text';
 
 import { errorMessage } from '../../config/Erros';
@@ -61,12 +61,12 @@ export default class RegisterProvider extends Component {
         />)
     }
     check = (navigate) => {
-        data=[];
-        var count=0;
+        data = [];
+        var count = 0;
         if (
             this.state.registroGeral.trim() != "" && !isNaN(this.state.registroGeral) &&
             ((this.state.tipoPessoa == 0 && this.cpfField.isValid()) ||
-             (this.state.tipoPessoa == 1 && this.cnpjField.isValid()))
+                (this.state.tipoPessoa == 1 && this.cnpjField.isValid()))
 
         ) {
             if(this.state.tipoPessoa==0){
@@ -86,7 +86,7 @@ export default class RegisterProvider extends Component {
                     certificacoes:this.state.certificacoes.trim()!=""?this.state.certificacoes:"Nenhuma"
                 }
             }
-            navigate.navigate('RegisterService',data);
+            navigate.navigate('RegisterService', data);
         } else {
             Alert.alert(
                 "Aviso",
@@ -127,10 +127,12 @@ export default class RegisterProvider extends Component {
                             onTabPress={((tipoPessoa) => this.setState({ tipoPessoa }))}
                             style={{ marginBottom: 25 }}
                         />
-                        {this.state.tipoPessoa == 0 ? this.displayCPF() :this.displayCNPJ()}
-                        <Input
+                        {this.state.tipoPessoa == 0 ? this.displayCPF() : this.displayCNPJ()}
+                        <TInput
+                            multiline={true}
+                            numberOfLines={5}
                             full
-                            label="Certificacoes"
+                            label="Certificações"
                             style={{ marginBottom: 25 }}
                             onChangeText={((certificacoes) => this.setState({ certificacoes }))}
                             value={this.state.certificacoes}

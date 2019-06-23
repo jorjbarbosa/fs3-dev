@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Alert, StyleSheet, ScrollView } from "react-native";
-import { Text, Block } from "../../components";
+import { Text, Block, Input } from "../../components";
 import firebase from 'react-native-firebase';
 import { sizes, colors } from "../../components/theme";
 
@@ -34,45 +34,45 @@ export default class MyAccount extends Component {
                         style={styles.card}>
                         <Block center middle style={styles.icon}>
                         </Block>
-                        <Text paragraph color="blue" weight="bold" >Meu Perfil</Text>
+                        <Text paragraph color="shadow" weight="bold" >Meu Perfil</Text>
 
                         <Block row style={styles.profile}>
                             <Block center middle>
                                 <Text paragraph color="black3"  >Nome</Text>
-                                <Text paragraph   >{this.state.usuario.nome}</Text>
+                                <Input style={{ marginRight: 3, marginBottom: 3 }} >{this.state.usuario.nome}</Input>
                             </Block>
                             <Block center middle>
                                 <Text h4 color="black3" >Sobrenome</Text>
-                                <Text paragraph >Galvão</Text>
+                                <Input />
                             </Block>
                         </Block>
 
                         <Block row style={styles.profile}>
                             <Block center middle>
                                 <Text paragraph color="black3"  >Contato</Text>
-                                <Text paragraph   >123456789-</Text>
+                                <Input style={{ marginRight: 3, marginBottom: 3 }} />
                             </Block>
                             <Block center middle>
                                 <Text h4 color="black3" >Email</Text>
-                                <Text paragraph >test@gmail.com</Text>
+                                <Input />
                             </Block>
                         </Block>
 
                         <Block row style={styles.profile}>
                             <Block center middle>
                                 <Text paragraph color="black3"  >Sexo</Text>
-                                <Text paragraph   >homi ou rapariga</Text>
+                                <Input style={{ marginRight: 3, marginBottom: 3 }} />
                             </Block>
                             <Block center middle>
                                 <Text h4 color="black3" >Senha</Text>
-                                <Text paragraph >********</Text>
+                                <Input />
                             </Block>
                         </Block>
 
                         <Block middle style={styles.inputs}>
                             <Block style={styles.label}>
                                 <Text h4 bold color="purple" center onPress={() => navigation.navigate("editaccont")}
-                                >Alterar Dados</Text>
+                                >Salvar Dados</Text>
                             </Block>
                         </Block>
                     </Block>
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: sizes.base * 0.4,
     },
     profile: {
-        paddingTop: 15
+        paddingTop: 15,
     },
 
     label: {

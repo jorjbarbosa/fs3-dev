@@ -3,9 +3,7 @@ import { StatusBar, Dimensions, Alert } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Icon from "react-native-vector-icons/Entypo";
 import { Button, Block, Text, Input } from "../../components";
-
 const { height } = Dimensions.get("window");
-
 import { errorMessage } from '../../config/Erros';
 import firebase from 'react-native-firebase';
 const db = firebase.firestore();
@@ -29,7 +27,7 @@ class Login extends Component {
   }
   componentWillMount() {
     firebase.auth().onAuthStateChanged(user => {
-      if(user)
+      if (user)
         this.props.navigation.navigate('Explore');
     })
   }

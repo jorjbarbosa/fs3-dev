@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { createBottomTabNavigator,createAppContainer } from "react-navigation";
+import { createBottomTabNavigator, createAppContainer } from "react-navigation";
 import Icon from "react-native-vector-icons/EvilIcons";
 import Explore from "../screens/explore";
 import Save from "../screens/save";
 import Notification from "../screens/alerts";
+import { Image } from "react-native";
 //import User from "../screens/user";
 import User from "./User";
 //import Status from "./components/compositor";
@@ -13,7 +14,7 @@ export default Modulo = createBottomTabNavigator(
     Explore: {
       screen: Explore,
       navigationOptions: {
-        tabBarLabel: "EXPLORAR",
+        tabBarLabel: "Explorar",
         tabBarIcon: ({ tintColor }) => (
           <Icon name="search" color={tintColor} size={25} />
         )
@@ -22,7 +23,7 @@ export default Modulo = createBottomTabNavigator(
     Salvos: {
       screen: Save,
       navigationOptions: {
-        tabBarLabel: "SALVOS",
+        tabBarLabel: "Salvos",
         tabBarIcon: ({ tintColor }) => (
           <Icon name="star" color={tintColor} size={25} />
         )
@@ -31,7 +32,7 @@ export default Modulo = createBottomTabNavigator(
     Notificação: {
       screen: Notification,
       navigationOptions: {
-        tabBarLabel: "ALERTAS",
+        tabBarLabel: "Notificação",
         tabBarIcon: ({ tintColor }) => (
           <Icon name="bell" color={tintColor} size={25} />
         )
@@ -40,9 +41,10 @@ export default Modulo = createBottomTabNavigator(
     Usuário: {
       screen: User,
       navigationOptions: {
-        tabBarLabel: "USUÁRIO",
+        tabBarLabel: "Usuário",
         tabBarIcon: ({ tintColor }) => (
-          <Icon name="navicon" color={tintColor} size={30} />
+
+          < Image source={require('../assets/images/icons/menu.png')} style={color = { tintColor }} />
         )
       }
     }
