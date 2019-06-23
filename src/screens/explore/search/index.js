@@ -1,57 +1,105 @@
-import React, { Component } from "react";
-import Icon from "react-native-vector-icons/Entypo";
-import { View, TextInput, StyleSheet, SafeAreaView } from "react-native";
+import React, { Component } from 'react'
+import { Animated, Dimensions, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
+import Icon from "react-native-vector-icons/EvilIcons";
+import { Input, Block, Text } from '../../../components';
+import { sizes, colors } from "../../../components/theme";
+const { width, height } = Dimensions.get('window');
 
-export default class Search extends Component {
+class Search extends Component {
+  state = {
+    searchFocus: new Animated.Value(0.6),
+    searchString: null,
+  }
+
+  handleSearchFocus(status) {
+    Animated.timing(
+      this.state.searchFocus,
+      {
+        toValue: status ? 0.8 : 0.6, // status === true, increase flex size
+        duration: 150, // ms
+      }
+    ).start();
+  }
+
+  renderSearch() {
+    const { searchString, searchFocus } = this.state;
+    const isEditing = searchFocus && searchString;
+    return (
+      <Block animated middle flex={0.8} style={styles.search}>
+        <Input
+          placeholder="Pesquisar"
+          placeholderTextColor={colors.caption}
+          style={styles.searchInput}
+          onFocus={() => this.handleSearchFocus(true)}
+          onBlur={() => this.handleSearchFocus(false)}
+          onChangeText={text => this.setState({ searchString: text })}
+          value={searchString}
+          onRightPress={() => isEditing ? this.setState({ searchString: null }) : null}
+          rightStyle={styles.searchRight}
+          rightLabel={
+            <Icon
+              name={isEditing ? "close" : "search"}
+              size={sizes.base}
+              color={colors.balck2}
+              style={styles.searchIcon}
+            />
+          }
+        />
+      </Block>
+    )
+  }
+
+
+
+
+
   render() {
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <View style={styles.container}>
-          <View style={styles.areaSerch}>
-            <Icon
-              name="tools"
-              color={"#772ea2"}
-              size={22}
-              style={{ marginTop: 5, paddingBottom: 10, marginLeft: 30 }}
-            />
-            <TextInput
-              style={styles.areaText}
-              placeholder="Busque seu serviço "
-              placeholderTextColor="white"
-            />
-          </View>
-        </View>
-      </SafeAreaView>
-    );
+      <Block>
+        <Block row center space="between" style={styles.header}>
+          <Text h3 weight="bold" >Explore</Text>
+          {this.renderSearch()}
+        </Block>
+
+
+      </Block>
+    )
   }
 }
+export default Search;
+
 const styles = StyleSheet.create({
-  container: {
-    height: 60,
-    backgroundColor: "#772ea2"
-    //borderBottomColor: "#dddddd"
+  header: {
+    paddingHorizontal: sizes.base * 2,
+    marginTop: sizes.base * 3,
   },
-
-  areaSerch: {
-    flexDirection: "row",
-    marginHorizontal: 50,
-    marginVertical: 20,
-    backgroundColor: "#ddf4",
-    borderRadius: 10,
-    shadowOffset: {
-      width: 0,
-      height: 0
-    },
-    shadowColor: "black",
-    shadowOpacity: 0.2,
-    elevation: 1
+  search: {
+    height: sizes.base * 2,
+    width: width - sizes.base * 2,
+    marginBottom: sizes.base
   },
-
-  areaText: {
-    color: "white",
-    //fontWeight: "700",
-    //backgroundColor: "#ddf4",
-    flex: 0.9,
-    fontSize: 15
+  searchInput: {
+    fontSize: sizes.caption,
+    height: sizes.base * 2.5,
+    backgroundColor: 'rgba(142, 142, 147, 0.06)',
+    borderColor: 'rgba(142, 142, 147, 0.06)',
+    paddingLeft: sizes.base / 1.5,
+    paddingRight: sizes.base * 2,
+  },
+  searchRight: {
+    top: 0,
+    marginVertical: 0,
+    backgroundColor: 'transparent'
+  },
+  searchIcon: {
+    position: 'absolute',
+    right: sizes.base / 1.333,
+    top: sizes.base + 22,
+  },
+  explore: {
+    marginHorizontal: sizes.padding * 1.25,
+    marginTop: 20
   }
-});
+
+
+})

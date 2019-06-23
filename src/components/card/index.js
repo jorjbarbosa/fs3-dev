@@ -46,20 +46,21 @@ export default class Card extends Component {
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    padding: 25,
-    backgroundColor: theme.colors.white
+    padding: 10,
+    backgroundColor: theme.colors.white,
+    marginTop: 5
   },
   header: {
     paddingBottom: 24
   },
   border: {
     borderColor: theme.colors.card,
-    borderWidth: 1
+    borderWidth: 0.2
   },
   shadow: {
-    shadowColor: theme.colors.shadow,
-    shadowOpacity: 1,
-    shadowRadius: 10,
+    shadowColor: theme.colors.green,
+    shadowOpacity: 2,
+    shadowRadius: 20,
     shadowOffset: { width: 0, height: 0 },
     elevation: 2
   }

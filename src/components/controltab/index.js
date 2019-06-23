@@ -60,17 +60,17 @@ const styles = StyleSheet.create({
     },
     tabTextStyle: { color: '#444444', fontWeight: 'bold' },
     activeTabStyle: {
-        backgroundColor: theme.colors.blue,
+        backgroundColor: theme.colors.purple,
         marginTop: 2
     },
-    activeTabTextStyle: { color: '#888888' },
+    activeTabTextStyle: { color: theme.colors.gray2 },
     input: {
         backgroundColor: theme.colors.input,
         borderWidth: 0.5,
         borderColor: theme.colors.border,
         borderRadius: 5,
         fontSize: theme.sizes.font,
-        color: theme.colors.black,
+        color: theme.colors.black2,
         height: 45,
         paddingVertical: 11,
         paddingHorizontal: 16

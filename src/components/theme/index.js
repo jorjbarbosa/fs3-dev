@@ -31,6 +31,7 @@ const sizes = {
   h2: 34,
   h3: 28,
   h4: 15,
+  h5: 18,
 
   paragraph: 15,
   caption: 13,
@@ -66,12 +67,20 @@ const fonts = {
     letterSpacing: 0,
     lineHeight: 18
   },
+  h5: {
+    fontFamily: "Rubik-Medium",
+    fontSize: sizes.h5,
+    color: colors.black,
+    letterSpacing: 0.5,
+    lineHeight: 20
+  },
+
   paragraph: {
     fontFamily: "Rubik-Regular",
     fontSize: sizes.paragraph,
     color: colors.black,
     letterSpacing: 0,
-    lineHeight: 22
+    lineHeight: 15
   },
   paragraphGray: {
     fontFamily: "Rubik-Regular",
@@ -92,7 +101,7 @@ const fonts = {
     fontSize: sizes.caption,
     color: colors.black3,
     letterSpacing: 1.12,
-    lineHeight: 15
+    lineHeight: 20
   },
   captionMedium: {
     fontFamily: "Rubik-Medium",
