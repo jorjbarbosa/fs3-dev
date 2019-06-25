@@ -48,9 +48,9 @@ export default class User extends Component {
         <Block style={styles.inputs}>
           <Block style={styles.label}>
             <Block row space="between">
-              <Icon name="trophy" color="purple" size={30} />
+              <Icon name="plus" color="purple" size={30} />
               <Block>
-                <Text h4 bold onPress={() => navigation.navigate("MyServices")}>Serviços Registrados</Text>
+                <Text h4 bold onPress={() => navigation.navigate("MyServices")}>Meus Serviços</Text>
               </Block>
               <Text medium secundary color="purple" onPress={() => navigation.navigate("MyServices")}>
                 <Icon name="chevron-right" color="purple" size={25} /></Text>
@@ -94,7 +94,7 @@ export default class User extends Component {
               </Block>
             </Block>
           </Block>
- 
+
           <Block style={styles.inputs}>
             <Block style={styles.label}>
               <Block row space="between">
