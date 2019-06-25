@@ -67,7 +67,7 @@ export default class RegisterProvider extends Component {
             this.state.registroGeral.trim() != "" && !isNaN(this.state.registroGeral) &&
             ((this.state.tipoPessoa == 0 && this.cpfField.isValid()) ||
                 (this.state.tipoPessoa == 1 && this.cnpjField.isValid()))
-
+ 
         ) {
             if(this.state.tipoPessoa==0){
                 data={

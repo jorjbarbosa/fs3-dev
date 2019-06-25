@@ -78,7 +78,9 @@ export default class RegisterService extends Component {
                     [
                         {
                             text: 'OK',
-                            onPress:()=>navigator.navigate("Index")
+                            onPress:()=>navigator.navigate("Index",{usuario:{
+                                prestador:true
+                            }})
                         }
                     ]
                 );
