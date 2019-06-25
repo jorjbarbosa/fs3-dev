@@ -1,24 +1,62 @@
 import React, { Component } from "react";
+import Icon from "react-native-vector-icons/Entypo";
+import { View, StatusBar, Dimensions, ScrollView, StyleSheet, Image } from "react-native";
+import { Input, Block, Text, CardN } from '../../components';
+import { sizes, colors } from "../../components/theme";
 
-import { View, Text, StyleSheet } from "react-native";
 
-// import { Container } from './styles';
 
 export default class Notification extends Component {
+  renderNotification() {
+    return (
+      <Block>
+        <Block>
+          <Text h3 weight="bold" row style={styles.header}>Notificação</Text>
+        </Block>
+        <CardN style={styles.card} >
+          <Block row space="between">
+            <Image
+              source={require('../../assets/images/icons/distance.png')}
+            />
+
+            <Block style={styles.cargo} row>
+              <Text caption weight="bold">notificação de Jardineiro  </Text>
+              <Text caption> ...</Text>
+            </Block>
+          </Block>
+
+        </CardN>
+      </Block>
+
+    )
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text>noti</Text>
+      <View>
+        <View>
+          <StatusBar backgroundColor="#772ea2" barStyle="light-content" />
+        </View>
+
+        <ScrollView showsVerticalScrollIndicator={false} style={styles.explore}>
+          {this.renderNotification()}
+        </ScrollView>
+
       </View>
     );
   }
 }
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff"
-  }
+  header: {
+    paddingHorizontal: sizes.base * 2,
+    marginTop: sizes.base * 2
+  },
+  card: {
+    borderRadius: 3
+  },
+  cargo: {
+    padding: 5,
+    marginTop: 8,
+
+  },
 });
