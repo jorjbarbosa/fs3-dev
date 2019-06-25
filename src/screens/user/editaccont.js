@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Alert, StyleSheet, ScrollView } from "react-native";
-import { Text, Block, Input } from "../../components";
+import { Text, Block, Input, InputMask, TInput } from "../../components";
 import firebase from 'react-native-firebase';
 import { sizes, colors } from "../../components/theme";
 
@@ -10,10 +10,11 @@ export default class EditAccount extends Component {
         this.ref = firebase.firestore().collection('usuario');
         this.state = {
             usuario: '',
+
         }
     }
-    componentWillMount(){
-        this.setState({ usuario: this.props.navigation.state.params.usuario});
+    componentWillMount() {
+        this.setState({ usuario: this.props.navigation.state.params.usuario });
     }
     render() {
         const { navigation } = this.props;
@@ -32,37 +33,61 @@ export default class EditAccount extends Component {
                         </Block>
                         <Text paragraph color="shadow" weight="bold" >Meu Perfil</Text>
 
-                        <Block row style={styles.profile}>
-                            <Block center middle>
-                                <Text paragraph color="black3"  >Nome</Text>
-                                <Input style={{ marginRight: 3, marginBottom: 3 }} >{this.state.usuario.nome}</Input>
-                            </Block>
-                            <Block center middle>
-                                <Text h4 color="black3" >Sobrenome</Text>
-                                <Input style={{ marginRight: 3, marginBottom: 3 }} >{this.state.usuario.sobrenome}</Input>
-                            </Block>
-                        </Block>
+                        <Block style={styles.profile}>
+                            <Input
+                                full
+                                label="Primeiro Nome"
+                                style={{ marginBottom: 25 }}
+                                onChangeText={((primeiroNome) => this.setState({ primeiroNome }))}
+                                value={this.state.usuario.nome}
+                            />
+                            <Input
+                                full
+                                label="Segundo Nome"
+                                style={{ marginBottom: 25 }}
+                                onChangeText={((segundoNome) => this.setState({ segundoNome }))}
+                                value={this.state.usuario.sobrenome}
 
-                        <Block row style={styles.profile}>
-                            <Block center middle>
-                                <Text paragraph color="black3"  >Contato</Text>
-                                <Input style={{ marginRight: 3, marginBottom: 3 }} >{this.state.usuario.contato}</Input>
-                            </Block>
-                            <Block center middle>
-                                <Text h4 color="black3" >Email</Text>
-                                <Input style={{ marginRight: 3, marginBottom: 3 }} >{firebase.auth().currentUser.email}</Input>
-                            </Block>
-                        </Block>
+                            />
+                            <InputMask
+                                full
+                                label="Telefone"
+                                mask={'cel-phone'}
+                                options={{
+                                    maskType: 'BRL',
+                                    withDDD: true
+                                }}
+                                onChangeText={((contato) => this.setState({ contato }))}
+                                value={this.state.usuario.contato}
+                                style={{ marginBottom: 25 }}
+                            />
 
-                        <Block row style={styles.profile}>
-                            <Block center middle>
-                                <Text paragraph color="black3"  >Sexo</Text>
-                                <Input style={{ marginRight: 3, marginBottom: 3 }} />
-                            </Block>
-                            <Block center middle>
-                                <Text h4 color="black3" >Senha</Text>
-                                <Input style={{ marginRight: 3, marginBottom: 3 }} >{firebase.auth().currentUser.password}</Input>
-                            </Block>
+                            <Input
+                                full
+                                label="Contato"
+                                style={{ marginBottom: 25 }}
+                                onChangeText={((segundoNome) => this.setState({ segundoNome }))}
+                                value={firebase.auth().currentUser.email}
+                            />
+                            <Input
+
+                                password
+                                label="Senha"
+                                style={{ marginBottom: 25 }}
+                                onChangeText={((senha) => this.setState({ senha }))}
+                                value={firebase.auth().currentUser.password}
+                            />
+                            <TInput
+                                multiline={true}
+                                numberOfLines={5}
+                                full
+                                label="Certificações"
+                                style={{ marginBottom: 25 }}
+                                onChangeText={((certificacoes) => this.setState({ certificacoes }))}
+                                value={this.state.certificacoes}
+                            />
+
+
                         </Block>
 
                         <Block middle style={styles.inputs}>
@@ -91,8 +116,8 @@ const styles = StyleSheet.create({
         borderColor: colors.blue,
         borderRadius: 5,
         backgroundColor: colors.white,
-        marginRight: 25,
-        marginLeft: 25,
+        marginRight: 20,
+        marginLeft: 20,
     },
     icon: {
         flex: 0,
