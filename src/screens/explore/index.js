@@ -11,17 +11,18 @@ export default class Explore extends Component {
   //Pode usar essa funcao para renderizar os dados!
   //para apresentação estou ocupando o espaço do scroll View
   renderExplore() {
+    const { navigation } = this.props;
     return (
 
-      <Card style={styles.card} >
-        <Block row space="between">
+      <Card style={styles.card}  >
+        <Block row space="between" >
           <Image
             source={require('../../assets/images/icons/distance.png')}
           />
           <Block style={styles.cargo} middle >
-            <Text h5 weight="bold">Jardineiro</Text>
+            <Text h5 weight="bold" onPress={() => navigation.navigate("Details")}>Jardineiro</Text>
           </Block>
-          <Text h5 style={styles.cargo}> $30</Text>
+          <Text h5 style={styles.cargo} > $30</Text>
         </Block>
         <Block row style={styles.stat}>
           <Block>
@@ -53,7 +54,9 @@ export default class Explore extends Component {
 
 
   render() {
+
     return (
+
       <View>
         <View>
           <StatusBar backgroundColor="#772ea2" barStyle="light-content" />

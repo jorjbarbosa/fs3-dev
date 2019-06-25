@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { createBottomTabNavigator, createAppContainer } from "react-navigation";
 import Icon from "react-native-vector-icons/EvilIcons";
-import Explore from "../screens/explore";
+import Exp from "./Explore";
 import Save from "../screens/save";
 import Notification from "../screens/alerts";
 import { Image } from "react-native";
@@ -12,7 +12,7 @@ import User from "./User";
 export default Modulo = createBottomTabNavigator(
   {
     Explore: {
-      screen: Explore,
+      screen: Exp,
       navigationOptions: {
         tabBarLabel: "Explorar",
         tabBarIcon: ({ tintColor }) => (
