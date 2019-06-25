@@ -43,7 +43,7 @@ export default class User extends Component {
     );
   }
   isPrestador = (navigation) => {
-    if (!this.state.usuario.prestador) {
+    if (this.state.usuario.prestador) {
       return (
         <Block style={styles.inputs}>
           <Block style={styles.label}>

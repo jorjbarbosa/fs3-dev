@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
-import { View, FlatList, Text, StyleSheet } from 'react-native'
-import { Button, Block, Input, InputMask, ControlTab } from "../.././components";
+import { View, FlatList, Dimensions, Text, StyleSheet, Image, ScrollView,Alert } from 'react-native'
+import { Button, Block, Input, InputMask, Card, MaskText } from "../.././components";
+import { sizes, colors } from "../../components/theme";
+import Icon from "react-native-vector-icons/Entypo";
+const { width, height } = Dimensions.get('window');
 
 import { errorMessage } from '../../config/Erros';
 import firebase from 'react-native-firebase';
+
 
 db = firebase.firestore();
 export default class MyServices extends Component {
@@ -12,83 +16,150 @@ export default class MyServices extends Component {
     this.refServicos = firebase.firestore().collection('servicos');
     this.refUsuario = firebase.firestore().collection('usuario');
     this.state = {
-      servicos: '',
+      servicos:'',
       nome: '',
-      load: true
+      load: true,
+      refreshing: false
     }
   }
   componentWillMount() {
+    this.loadData();
+  }
+  loadData() {
     const services = [];
     const userRef = this.refUsuario.doc(firebase.auth().currentUser.uid);
-    console.log(userRef);
-    this.refServicos.where('proprietario', '==',userRef).get().then(snapshot => {
+    this.refServicos.where('proprietario', '==', userRef).get().then(snapshot => {
       snapshot.forEach(doc => {
-        const { descricao, cidade, areaAtuacao, preco } = doc.data();
-        areaAtuacao.get().then(doc => {
-          const { nome } = doc.data();
-          services.push({
-            key: doc.id,
-            descricao,
-            cidade,
-            areaAtuacao: nome,
-            preco
-          });
+        var obj={};
+        const { descricao, localizacao, area, preco, pagamento, nota } = doc.data();
+        
+        obj.descricao=descricao;
+        obj.localizacao=localizacao;
+        obj.preco=preco;
+        obj.pagamento=pagamento;
+        obj.nota=nota;
+        obj.key=doc.id;
+        console.log(area);
+        area.get().then(dc => {
+          console.log(dc.data());
+          const { nome } = dc.data();
+          obj.area = nome;
         });
-
+        services.push(obj);
+        console.log(services);
       });
       this.setState({
         servicos: services,
-        load: false
+        load: false,
+        refreshing: false
       });
-      console.log(this.state.servicos);
     }).catch(err => {
+      this.setState({
+        load: false,
+        refreshing: false
+      });
+      Alert.alert(
+        "Ops...",
+        "Ocorreu um erro",
+        [{
+          text: 'Tentar novamente',
+          onPress: () => this.loadData()
+        }]
+      );
       console.log('Error getting documents', err);
     });
   }
+  deleteService(){
+    Alert.alert(
+      "AVISO",
+      "Tem certeza que deseja excluir?",
+      [
+        {
+        text: 'Confirmar',
+        onPress: () => console.log("confirma")
+        },
+        {
+          text: 'Cancelar',
+          onPress: () => console.log("cancelar")
+        }
+      ]
+    );
+  }
+  renderCard = (item) => {
+    return (
+      <Card style={styles.card} >
+        <Block row space="between">
+          <Image
+            source={require('../../assets/images/icons/distance.png')}
+          />
+          <Block style={styles.cargo} middle >
+            <Text h5 weight="bold">{item.descricao}</Text>
+          </Block>
+          <MaskText h5 style={styles.cargo} mask="money" value={item.preco} />
+        </Block>
+        <Block row style={styles.stat}>
+          <Block style={styles.stat2}>
+            <Text caption >Pagamento</Text>
+            <Text paragraphGray >
+              {item.pagamento.cartao ? <Icon name="credit-card" color="teal" size={15} /> : null}
+              {item.pagamento.dinheiro ? <Icon name="credit" color="teal" size={15} /> : null}
+            </Text>
+          </Block>
+          <Block >
+            <Text paragraphGray >
+              {item.nota}
+              <Icon name="star" color="purple" size={15} />
+            </Text>
+          </Block>
+        </Block>
+        <Block row style={styles.stat}>
+          <Block style={styles.stat2}>
+            {/* <Text paragraphGray onPress={()=>{this.props.navigation.navigate("EditService"),{service:item}}}> */}
+            <Text paragraphGray onPress={()=>{console.log(item)}}>
+              Editar
+            </Text> 
+          </Block>
+          <Block style={styles.stat2}>
+            <Text paragraphGray onPress={()=>{this.deleteService()}}>
+              Excluir
+            </Text> 
+          </Block>
+        </Block>
+      </Card>
+
+    );
+  }
+  reloadList = () => {
+    this.setState({
+      refreshing: true,
+      load: true
+    }, () => {
+      this.loadData();
+    });
+  }
   render() {
-    if (this.state.load) {
+    if (this.state.load || this.state.refreshing) {
       return (
         <View>
           <Text style={styles.item}>Carregando</Text>
         </View>
       );
-    } else
+    }
       return (
-        <View style={styles.container}>
+        <View>
           <View>
             <Text style={styles.item}>Meus serviços</Text>
           </View>
-
           <FlatList
             data={this.state.servicos}
+            style={styles.explore}
             renderItem={({ item }) =>
-            <Block>
-              <View>
-                <Text style={styles.item}>Nome {item.descricao}</Text>
-              </View>
-              <View>
-                <Text style={styles.item}>Cidade {item.cidade}</Text>
-              </View>
-              <View>
-                <Text style={styles.item}>{item.areaAtuacao}</Text>
-              </View>
-              <View>
-                <Text style={styles.item}>Preco {item.preco}</Text>
-              </View>
-              <View>
-                <Text style={styles.item}>Nota {item.preco}</Text>
-              </View>
-              <View>
-                <Text style={styles.item}>Editar</Text>
-              </View>
-              <View>
-                <Text style={styles.item}>Excluir</Text>
-              </View>
-              </Block>
+              this.renderCard(item)
             }
             keyExtractor={item => item.key}
+            refreshing={this.state.refreshing}
+            onRefresh={this.reloadList}
           />
-
         </View>
       );
   }
@@ -104,4 +175,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     height: 44,
   },
+  card: {
+    borderRadius: 3
+  },
+  cargo: {
+    padding: 5,
+    marginTop: 8,
+    marginLeft: 5
+  },
+  stat: {
+    marginLeft: 10
+  },
+  stat2: {
+    marginRight: 0
+  },
+  explore: {
+    marginHorizontal: sizes.padding * 0.5,
+  }
 })
