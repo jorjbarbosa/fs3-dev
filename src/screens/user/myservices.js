@@ -32,7 +32,6 @@ export default class MyServices extends Component {
       snapshot.forEach(doc => {
         var obj = {};
         const { descricao, localizacao, area, preco, pagamento, nota } = doc.data();
-<<<<<<< HEAD
         
         obj.descricao=descricao;
         obj.localizacao=localizacao;
@@ -40,16 +39,6 @@ export default class MyServices extends Component {
         obj.pagamento=pagamento;
         obj.nota=nota;
         obj.key=doc.id;
-=======
-
-        obj.descricao = descricao;
-        obj.localizacao = localizacao;
-        obj.preco = preco;
-        obj.pagamento = pagamento;
-        obj.nota = nota;
-        obj.key = doc.id;
-        console.log(area);
->>>>>>> 35967b6aa1af2b9fe78c43a691d9872b1ee6f41e
         area.get().then(dc => {
           const { nome } = dc.data();
           obj.area = nome;
