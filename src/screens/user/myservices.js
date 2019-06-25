@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { View, FlatList, Dimensions, Text, StyleSheet, Image, ScrollView,Alert } from 'react-native'
-import { Button, Block, Input, InputMask, Card, MaskText } from "../.././components";
+import { View, FlatList, Dimensions, StyleSheet, Image, ScrollView, Alert } from 'react-native'
+import { Button, Block, Text, InputMask, Card, MaskText } from "../.././components";
 import { sizes, colors } from "../../components/theme";
 import Icon from "react-native-vector-icons/Entypo";
 const { width, height } = Dimensions.get('window');
@@ -16,7 +16,7 @@ export default class MyServices extends Component {
     this.refServicos = firebase.firestore().collection('servicos');
     this.refUsuario = firebase.firestore().collection('usuario');
     this.state = {
-      servicos:'',
+      servicos: '',
       nome: '',
       load: true,
       refreshing: false
@@ -30,8 +30,9 @@ export default class MyServices extends Component {
     const userRef = this.refUsuario.doc(firebase.auth().currentUser.uid);
     this.refServicos.where('proprietario', '==', userRef).get().then(snapshot => {
       snapshot.forEach(doc => {
-        var obj={};
+        var obj = {};
         const { descricao, localizacao, area, preco, pagamento, nota } = doc.data();
+<<<<<<< HEAD
         
         obj.descricao=descricao;
         obj.localizacao=localizacao;
@@ -39,6 +40,16 @@ export default class MyServices extends Component {
         obj.pagamento=pagamento;
         obj.nota=nota;
         obj.key=doc.id;
+=======
+
+        obj.descricao = descricao;
+        obj.localizacao = localizacao;
+        obj.preco = preco;
+        obj.pagamento = pagamento;
+        obj.nota = nota;
+        obj.key = doc.id;
+        console.log(area);
+>>>>>>> 35967b6aa1af2b9fe78c43a691d9872b1ee6f41e
         area.get().then(dc => {
           const { nome } = dc.data();
           obj.area = nome;
@@ -66,14 +77,14 @@ export default class MyServices extends Component {
       console.log('Error getting documents', err);
     });
   }
-  deleteService(){
+  deleteService() {
     Alert.alert(
       "AVISO",
       "Tem certeza que deseja excluir?",
       [
         {
-        text: 'Confirmar',
-        onPress: () => console.log("confirma")
+          text: 'Confirmar',
+          onPress: () => console.log("confirma")
         },
         {
           text: 'Cancelar',
@@ -112,14 +123,14 @@ export default class MyServices extends Component {
         <Block row style={styles.stat}>
           <Block style={styles.stat2}>
             {/* <Text paragraphGray onPress={()=>{this.props.navigation.navigate("EditService"),{service:item}}}> */}
-            <Text paragraphGray onPress={()=>{console.log(item)}}>
+            <Text paragraphGray onPress={() => { console.log(item) }} color="yellow" >
               Editar
-            </Text> 
+            </Text>
           </Block>
           <Block style={styles.stat2}>
-            <Text paragraphGray onPress={()=>{this.deleteService()}}>
+            <Text paragraphGray onPress={() => { this.deleteService() }} color="red">
               Excluir
-            </Text> 
+            </Text>
           </Block>
         </Block>
       </Card>
@@ -142,28 +153,33 @@ export default class MyServices extends Component {
         </View>
       );
     }
-      return (
+    return (
+      <View>
         <View>
-          <View>
-            <Text style={styles.item}>Meus serviços</Text>
-          </View>
-          <FlatList
-            data={this.state.servicos}
-            style={styles.explore}
-            renderItem={({ item }) =>
-              this.renderCard(item)
-            }
-            keyExtractor={item => item.key}
-            refreshing={this.state.refreshing}
-            onRefresh={this.reloadList}
-          />
+          <Text h3 weight="bold" style={styles.header}>Meus Serviços</Text>
         </View>
-      );
+        <FlatList
+          data={this.state.servicos}
+          style={styles.explore}
+          renderItem={({ item }) =>
+            this.renderCard(item)
+          }
+          keyExtractor={item => item.key}
+          refreshing={this.state.refreshing}
+          onRefresh={this.reloadList}
+        />
+      </View>
+    );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  header: {
+    paddingHorizontal: sizes.base * 2,
+    marginTop: sizes.base * 1.5,
+    paddingBottom: sizes.base * 2,
+
+  }, container: {
     flex: 1,
     paddingTop: 22
   },
