@@ -12,12 +12,19 @@ export default class User extends Component {
     this.ref = firebase.firestore().collection('usuario');
     this.state = {
       usuario: '',
+      load:true,
     }
   }
   componentWillMount() {
+    this.inicializa();
+  }
+  componentDidUpdate(){
+    this.inicializa();
+  }
+  inicializa(){
     user = firebase.auth().currentUser;
     this.ref.doc(user.uid).get().then(doc => {
-      this.setState({ usuario: doc.data() });
+      this.setState({ usuario: doc.data(),load:false });
     }).catch(err => {
       console.log(err);//avisar falta de conexao
     });
@@ -101,8 +108,8 @@ export default class User extends Component {
                 <Icon name="pencil" color="purple" size={30} />
                 <Block>
                   <Text bold onPress={() => this.state.usuario.prestador
-                    ? navigation.navigate("RegisterService", { usuario: this.state.usuario.prestador })
-                    : navigation.navigate("RegisterProvider", { usuario: this.state.usuario.prestador })}>Registrar Serviço</Text>
+                    ? navigation.navigate("RegisterService", { usuario: this.state.usuario })
+                    : navigation.navigate("RegisterProvider", { usuario: this.state.usuario })}>Registrar Serviço</Text>
                 </Block>
                 <Text medium secundary color="purple" onPress={() => this.state.usuario.prestador
                   ? navigation.navigate("RegisterService", { usuario: this.state.usuario.prestador })

@@ -67,36 +67,40 @@ export default class RegisterProvider extends Component {
             this.state.registroGeral.trim() != "" && !isNaN(this.state.registroGeral) &&
             ((this.state.tipoPessoa == 0 && this.cpfField.isValid()) ||
                 (this.state.tipoPessoa == 1 && this.cnpjField.isValid()))
- 
+
         ) {
-            if(this.state.tipoPessoa==0){
-                data={
-                    prestador:navigate.state.params.prestador,
-                    rg:this.state.registroGeral,
-                    tipoPessoa:true,
-                    cpf:this.cpfField.getRawValue(),
-                    certificacoes:this.state.certificacoes.trim()!=""?this.state.certificacoes:"Nenhuma"
+            if (this.state.tipoPessoa == 0) {
+
+                usuario = {
+                    prestador: navigate.state.params.prestador,
+                    rg: this.state.registroGeral,
+                    tipoPessoa: true,
+                    cpf: this.cpfField.getRawValue(),
+                    certificacoes: this.state.certificacoes.trim() != "" ? this.state.certificacoes : "Nenhuma"
                 }
-            }else{
-                data={
-                    prestador:navigate.state.params.prestador,
-                    rg:this.state.registroGeral,
-                    tipoPessoa:false,
-                    cnpj:this.cnpjField.getRawValue(),
-                    certificacoes:this.state.certificacoes.trim()!=""?this.state.certificacoes:"Nenhuma"
+
+            } else {
+
+                usuario = {
+                    prestador: navigate.state.params.prestador,
+                    rg: this.state.registroGeral,
+                    tipoPessoa: false,
+                    cnpj: this.cnpjField.getRawValue(),
+                    certificacoes: this.state.certificacoes.trim() != "" ? this.state.certificacoes : "Nenhuma"
                 }
+
             }
-            navigate.navigate('RegisterService', data);
+            navigate.navigate('RegisterService', { usuario: usuario });
         } else {
             Alert.alert(
                 "Aviso",
                 "Preencha os dados corretamente",
                 [
-                  {
-                    text: 'OK'
-                  }
+                    {
+                        text: 'OK'
+                    }
                 ]
-              );
+            );
         }
     }
     render() {

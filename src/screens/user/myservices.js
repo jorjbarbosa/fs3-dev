@@ -39,14 +39,11 @@ export default class MyServices extends Component {
         obj.pagamento=pagamento;
         obj.nota=nota;
         obj.key=doc.id;
-        console.log(area);
         area.get().then(dc => {
-          console.log(dc.data());
           const { nome } = dc.data();
           obj.area = nome;
         });
         services.push(obj);
-        console.log(services);
       });
       this.setState({
         servicos: services,

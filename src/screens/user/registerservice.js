@@ -46,31 +46,31 @@ export default class RegisterService extends Component {
                 },
                 nota: 0
             }
-            if (!navigator.state.params.prestador) {
-                if (navigator.state.params.tipoPessoa) {
+            if (!navigator.state.params.usuario.prestador) {
+                if (navigator.state.params.usuario.tipoPessoa) {
                     user = {
                         prestador: true,
                         dados: {
-                            certificacoes: navigator.state.params.certificacoes,
-                            rg: navigator.state.params.rg,
+                            certificacoes: navigator.state.params.usuario.certificacoes,
+                            rg: navigator.state.params.usuario.rg,
                             tipoPessoa: true,
-                            cpf: navigator.state.params.cpf
+                            cpf: navigator.state.params.usuario.cpf
                         }
                     }
                 } else {
                     user = {
                         prestador: true,
                         dados: {
-                            certificacoes: navigator.state.params.certificacoes,
-                            rg: navigator.state.params.rg,
+                            certificacoes: navigator.state.params.usuario.certificacoes,
+                            rg: navigator.state.params.usuario.rg,
                             tipoPessoa: false,
-                            cnpj: navigator.state.params.cpf
+                            cnpj: navigator.state.params.usuario.cnpj
                         }
                     }
                 }
             }
             try {
-                navigator.state.params.prestador?null:db.collection('usuario').doc(firebase.auth().currentUser.uid).update(user);
+                navigator.state.params.usuario.prestador?null:db.collection('usuario').doc(firebase.auth().currentUser.uid).update(user);
                 db.collection('servicos').doc().set(servico);
                 Alert.alert(
                     "Aviso",
@@ -78,9 +78,7 @@ export default class RegisterService extends Component {
                     [
                         {
                             text: 'OK',
-                            onPress:()=>navigator.navigate("Index",{usuario:{
-                                prestador:true
-                            }})
+                            onPress:()=>navigator.navigate("Index")
                         }
                     ]
                 );
@@ -149,9 +147,10 @@ export default class RegisterService extends Component {
             this.setState({
                 areas: areas,
                 areaAtuacao: areas[0],
-                load: true
+                load: false
             });
         });
+        console.log(this.props.navigation.state.params.usuario);
     }
     multIndexSelect = (index) => {
         const { pagamento } = this.state
@@ -173,7 +172,7 @@ export default class RegisterService extends Component {
     render() {
         const { navigation } = this.props;
 
-        if (!this.state.load) {//colocar animação de carregamento
+        if (this.state.load) {//colocar animação de carregamento
             return (
                 <View>
                     <Text>Estou Carregando</Text>
