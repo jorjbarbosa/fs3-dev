@@ -13,7 +13,7 @@ export default class RegisterService extends Component {
     constructor() {
         super();
         this.refArea = firebase.firestore().collection('areas');
-
+        this.refUsuario = firebase.firestore().collection('usuario');
         var precoField;
         this.state = {
             descricao: '',
@@ -32,13 +32,13 @@ export default class RegisterService extends Component {
             this.state.areaAtuacao.key != -1 && this.precoField.getRawValue() > 0 && this.state.pagamento.length > 0) {
 
             var servico = {
-                proprietario: 'usuario/'+firebase.auth().currentUser.uid,
+                proprietario: this.refUsuario.doc(firebase.auth().currentUser.uid),
                 descricao: this.state.descricao,
                 localizacao: {
                     cidade: this.state.cidade,
                     estado: this.state.estado
                 },
-                area:'areas/'+this.state.areaAtuacao.key,
+                area:this.refArea.doc(this.state.areaAtuacao.key),
                 preco: this.precoField.getRawValue(),
                 pagamento: {
                     dinheiro: this.state.pagamento.includes(0),
@@ -77,7 +77,8 @@ export default class RegisterService extends Component {
                     "Serviço registrado com sucesso",
                     [
                         {
-                            text: 'OK'
+                            text: 'OK',
+                            onPress:()=>navigator.navigate("Index")
                         }
                     ]
                 );
