@@ -99,7 +99,14 @@ export default class EditAccount extends Component {
               );
         } catch (error) {
             console.log(error);
-            Alert.alert(errorMessage(error.code));
+            Alert.alert(
+                'Aviso',
+                errorMessage(error.code),
+                [{
+                    text:"Tente novamente",
+                    onPress:()=>this.update(navigate)
+                }]
+            );
         }
 
     }
