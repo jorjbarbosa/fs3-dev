@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Alert, StyleSheet, ScrollView } from "react-native";
-import { Text, Block } from "../../components";
+import { Text, Block, Label, MaskText } from "../../components";
 import firebase from 'react-native-firebase';
 import { sizes, colors } from "../../components/theme";
+
 
 export default class MyAccount extends Component {
     constructor() {
@@ -12,12 +13,52 @@ export default class MyAccount extends Component {
             usuario: '',
         }
     }
-    componentDidMount(){
-        this.setState({ usuario: this.props.navigation.state.params.usuario});
+    componentWillMount() {
+        this.setState({ usuario: this.props.navigation.state.params.usuario });
     }
+    componentDidUpdate(){
+        user = firebase.auth().currentUser;
+        this.ref.doc(user.uid).get().then(doc => {
+          this.setState({ usuario: doc.data() });
+        }).catch(err => {
+          console.log(err);//avisar falta de conexao
+        });
+      }
+      
+    isPrestador() {
+        if (this.state.usuario.prestador) {
+            return (
+                <Block center middle>
+                    <Block row style={styles.profile}>
+                        <Block center middle>
+                            <Text h4 color="black3" >RG</Text>
+                            <Text paragraph >{this.state.usuario.dados.rg}</Text>
+                        </Block>
+                        {this.state.usuario.dados.tipoPessoa ?
+                            <Block center middle>
+                                <Text h4 color="black3" >CPF</Text>
+                                <MaskText h5 style={styles.cargo} mask="cpf" value={this.state.usuario.dados.cpf} />
+                            </Block>
+                            :
+                            <Block center middle>
+                                <Text h4 color="black3" >CNPJ</Text>
+                                <MaskText h5 style={styles.cargo} mask="cnpj" value={this.state.usuario.dados.cnpj} />
+                            </Block>
+                        }
+                    </Block>
+                    <Block row style={styles.profile}>
+                        <Block center middle>
+                            <Text h4 color="black3" >Certificados</Text>
+                            <Text paragraph >{this.state.usuario.dados.certificacoes}</Text>
+                        </Block>
+                    </Block>
+                </Block>
+            )
+        }
+    };
     render() {
         const { navigation } = this.props;
-        
+
         return (
             <ScrollView showsVerticalScrollIndicator={false}>
                 <Block >
@@ -50,22 +91,22 @@ export default class MyAccount extends Component {
                                 <Text paragraph   >{this.state.usuario.telefone}</Text>
                             </Block>
                             <Block center middle>
-                                <Text h4 color="black3" >Email</Text>
-                                <Text paragraph >{firebase.auth().currentUser.email}</Text>
+                                <Text paragraph color="black3"  >Sexo</Text>
+                                <Text paragraph >{this.state.usuario.sexo == 0 ? "Masculino" : "Feminino"}</Text>
                             </Block>
+
                         </Block>
 
                         <Block row style={styles.profile}>
                             <Block center middle>
-                                <Text paragraph color="black3"  >Sexo</Text>
-                                <Text paragraph >{this.state.usuario.sexo==0?"Masculino":"Feminino"}</Text>
+                                <Text h4 color="black3" >Email</Text>
+                                <Text paragraph >{firebase.auth().currentUser.email}</Text>
                             </Block>
-                            
                         </Block>
-
+                        {this.isPrestador()}
                         <Block middle style={styles.inputs}>
                             <Block style={styles.label}>
-                                <Text h4 bold color="purple" center onPress={() => navigation.navigate("EditAccount",{usuario:this.state.usuario})}
+                                <Text h4 bold color="purple" center onPress={() => navigation.navigate("EditAccount", { usuario: this.state.usuario })}
                                 >Alterar Dados</Text>
                             </Block>
                         </Block>

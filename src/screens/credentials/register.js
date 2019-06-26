@@ -26,6 +26,7 @@ class Register extends Component {
     segundoNome: '',
     email: '',
     telefone: '',
+    telefoneRef:'',
     senha: '',
     sexo:0,
     primeiroNomeErr: '',
@@ -40,7 +41,7 @@ class Register extends Component {
     data = {
       nome: this.state.primeiroNome,
       sobrenome: this.state.segundoNome,
-      telefone: this.state.telefone,
+      telefone: this.state.telefoneRef.getRawValue(),
       sexo: this.state.sexo
     }
     firebase.auth()
@@ -48,7 +49,7 @@ class Register extends Component {
       .then(function () {
         user = firebase.auth().currentUser;       
         db.collection('usuario').doc(user.uid).set(data);
-        navigate.navigate("Explore");   // redirecionar cadastro bem sucedido      
+        navigation.navigate("MyAccount", { usuario: this.state.usuario })   // redirecionar cadastro bem sucedido      
       })
       .catch(error => {
         Alert.alert(errorMessage(error.code));//aviso de erro
@@ -116,7 +117,7 @@ class Register extends Component {
 
             <InputMask
               full
-              label="Telefone"
+              label="Contato"
               mask={'cel-phone'}
               options={{
                 maskType: 'BRL',
@@ -125,6 +126,7 @@ class Register extends Component {
               onChangeText={((telefone) => this.setState({ telefone }))}
               value={this.state.telefone}
               style={{ marginBottom: 25 }}
+              reference={((ref) => this.telefoneRef = ref)}
             />
             <Input
               full
