@@ -8,6 +8,7 @@ import RegisterProvider from "../screens/user/registerprovider";
 import EngagedService from "../screens/user/engagedservice";
 import MyServices from "../screens/user/myservices";
 import EditAccount from "../screens/user/editaccont";
+import EditMyServices from "../screens/user/editmyservices";
 const User = createStackNavigator(
   {
     Index,
@@ -16,7 +17,8 @@ const User = createStackNavigator(
     RegisterProvider,
     EngagedService,
     MyServices,
-    EditAccount
+    EditAccount,
+    EditMyServices
 
   },
   {
@@ -25,12 +27,12 @@ const User = createStackNavigator(
     }
   }
 );
-User.navigationOptions=({navigation})=>{
+User.navigationOptions = ({ navigation }) => {
   let tabBarVisible;
   if (navigation.state.index > 0) {
     tabBarVisible = false;
-  }else
-    tabBarVisible=true;
+  } else
+    tabBarVisible = true;
 
   return {
     tabBarVisible,

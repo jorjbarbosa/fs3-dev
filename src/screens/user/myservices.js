@@ -32,13 +32,13 @@ export default class MyServices extends Component {
       snapshot.forEach(doc => {
         var obj = {};
         const { descricao, localizacao, area, preco, pagamento, nota } = doc.data();
-        
-        obj.descricao=descricao;
-        obj.localizacao=localizacao;
-        obj.preco=preco;
-        obj.pagamento=pagamento;
-        obj.nota=nota;
-        obj.key=doc.id;
+
+        obj.descricao = descricao;
+        obj.localizacao = localizacao;
+        obj.preco = preco;
+        obj.pagamento = pagamento;
+        obj.nota = nota;
+        obj.key = doc.id;
         area.get().then(dc => {
           const { nome } = dc.data();
           obj.area = nome;
@@ -83,6 +83,7 @@ export default class MyServices extends Component {
     );
   }
   renderCard = (item) => {
+    const { navigation } = this.props;
     return (
       <Card style={styles.card} >
         <Block row space="between">
@@ -112,7 +113,8 @@ export default class MyServices extends Component {
         <Block row style={styles.stat}>
           <Block style={styles.stat2}>
             {/* <Text paragraphGray onPress={()=>{this.props.navigation.navigate("EditService"),{service:item}}}> */}
-            <Text paragraphGray onPress={() => { console.log(item) }} color="yellow" >
+            <Text paragraphGray onPress={() => { console.log(item) }} color="yellow"
+              onPress={() => navigation.navigate("EditMyServices")}>
               Editar
             </Text>
           </Block>
@@ -122,7 +124,7 @@ export default class MyServices extends Component {
             </Text>
           </Block>
         </Block>
-      </Card>
+      </Card >
 
     );
   }
@@ -147,7 +149,7 @@ export default class MyServices extends Component {
         <View>
           <Text h3 weight="bold" style={styles.header}>Meus Serviços</Text>
         </View>
-        <FlatList
+        <FlatList showsVerticalScrollIndicator={false}
           data={this.state.servicos}
           style={styles.explore}
           renderItem={({ item }) =>
@@ -168,7 +170,8 @@ const styles = StyleSheet.create({
     marginTop: sizes.base * 1.5,
     paddingBottom: sizes.base * 2,
 
-  }, container: {
+  },
+  container: {
     flex: 1,
     paddingTop: 22
   },

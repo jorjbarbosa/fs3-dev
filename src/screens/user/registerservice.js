@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { View, Alert, Picker } from 'react-native'
+import { View, Alert, Picker, StyleSheet } from 'react-native'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button, Block, Text, Input, InputMask, ControlTab } from "../.././components";
-
+import { sizes, colors } from "../../components/theme";
 import { errorMessage } from '../../config/Erros';
 import firebase from 'react-native-firebase';
 
@@ -38,7 +38,7 @@ export default class RegisterService extends Component {
                     cidade: this.state.cidade,
                     estado: this.state.estado
                 },
-                area:this.refArea.doc(this.state.areaAtuacao.key),
+                area: this.refArea.doc(this.state.areaAtuacao.key),
                 preco: this.precoField.getRawValue(),
                 pagamento: {
                     dinheiro: this.state.pagamento.includes(0),
@@ -70,7 +70,7 @@ export default class RegisterService extends Component {
                 }
             }
             try {
-                navigator.state.params.usuario.prestador?null:db.collection('usuario').doc(firebase.auth().currentUser.uid).update(user);
+                navigator.state.params.usuario.prestador ? null : db.collection('usuario').doc(firebase.auth().currentUser.uid).update(user);
                 db.collection('servicos').doc().set(servico);
                 Alert.alert(
                     "Aviso",
@@ -78,7 +78,7 @@ export default class RegisterService extends Component {
                     [
                         {
                             text: 'OK',
-                            onPress:()=>navigator.navigate("Index")
+                            onPress: () => navigator.navigate("Index")
                         }
                     ]
                 );
@@ -92,8 +92,8 @@ export default class RegisterService extends Component {
                             text: 'Cancelar'
                         },
                         {
-                            text:"Tentar novamente",
-                            onPress:()=>this.check(navigator)
+                            text: "Tentar novamente",
+                            onPress: () => this.check(navigator)
                         }
                     ]
                 );
@@ -183,14 +183,12 @@ export default class RegisterService extends Component {
             return (
 
                 <KeyboardAwareScrollView style={{ marginVertical: 40 }} showsVerticalScrollIndicator={false}>
-                    <Block center>
-                        <Text h3 style={{ marginBottom: 6 }}>
-                            Cadastre um serviço
-                    </Text>
+                    <Block >
+                        <Text h3 weight="bold" style={styles.header}>Registrar Serviço</Text>
                         <Block center style={{ marginTop: 25 }}>
                             <Input
                                 full
-                                label="Descricao"
+                                label="Descrição"
                                 style={{ marginBottom: 25 }}
                                 onChangeText={((descricao) => this.setState({ descricao }))}
                                 value={this.state.descricao}
@@ -262,3 +260,9 @@ export default class RegisterService extends Component {
             )
     }
 }
+const styles = StyleSheet.create({
+    header: {
+        paddingHorizontal: sizes.base * 2,
+
+    }
+})

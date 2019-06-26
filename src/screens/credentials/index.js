@@ -75,7 +75,7 @@ class Login extends Component {
                     color="gray"
                     onPress={() => navigation.navigate("Forgot")}
                   >
-                    Esqueceu sua Senha?
+                    Esqueci minha senha!
                   </Text>
                 }
               />
