@@ -8,4 +8,5 @@ import InputMask from "./inputmask";
 import TInput from "./textInput";
 import ControlTab from "./controltab";
 import MaskText from "./masktext";
-export { Block, Text, Input, Button, Card, Label, InputMask, ControlTab, TInput,MaskText };
+import Divider from "./linha"
+export { Block, Text, Input, Button, Card, Label, InputMask, ControlTab, TInput, MaskText, Divider };

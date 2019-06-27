@@ -25,7 +25,7 @@ export default Modulo = createBottomTabNavigator(
       navigationOptions: {
         tabBarLabel: "Salvos",
         tabBarIcon: ({ tintColor }) => (
-          <Icon name="star" color={tintColor} size={25} />
+          <Icon name="heart" color={tintColor} size={25} />
         )
       }
     },
