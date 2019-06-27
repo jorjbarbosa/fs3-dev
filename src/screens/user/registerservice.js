@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Alert, Picker, StyleSheet } from 'react-native'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Button, Block, Text, Input, InputMask, ControlTab } from "../.././components";
+import { Button, Block, Text, Input, InputMask, ControlTab,TInput } from "../.././components";
 import { sizes, colors } from "../../components/theme";
 import { errorMessage } from '../../config/Erros';
 import firebase from 'react-native-firebase';
@@ -16,6 +16,7 @@ export default class RegisterService extends Component {
         this.refUsuario = firebase.firestore().collection('usuario');
         var precoField;
         this.state = {
+            titulo: '',
             descricao: '',
             cidade: '',
             estado: '',
@@ -28,11 +29,12 @@ export default class RegisterService extends Component {
         }
     }
     check = (navigator) => {
-        if (this.state.descricao.trim() != "" && this.state.cidade.trim() != "" && this.state.estado.trim() != "" &&
+        if (this.state.titulo.trim() != "" && this.state.descricao.trim() != "" && this.state.cidade.trim() != "" && this.state.estado.trim() != "" &&
             this.state.areaAtuacao.key != -1 && this.precoField.getRawValue() > 0 && this.state.pagamento.length > 0) {
 
             var servico = {
                 proprietario: this.refUsuario.doc(firebase.auth().currentUser.uid),
+                titulo: this.state.titulo,
                 descricao: this.state.descricao,
                 localizacao: {
                     cidade: this.state.cidade,
@@ -188,7 +190,16 @@ export default class RegisterService extends Component {
                         <Block center style={{ marginTop: 25 }}>
                             <Input
                                 full
-                                label="Descrição"
+                                label="Titulo"
+                                style={{ marginBottom: 25 }}
+                                onChangeText={((titulo) => this.setState({ titulo }))}
+                                value={this.state.titulo}
+                            />
+                            <TInput
+                                multiline={true}
+                                numberOfLines={5}
+                                full
+                                label="Descricação"
                                 style={{ marginBottom: 25 }}
                                 onChangeText={((descricao) => this.setState({ descricao }))}
                                 value={this.state.descricao}
@@ -207,7 +218,7 @@ export default class RegisterService extends Component {
                             <Picker
                                 selectedValue={this.state.areaAtuacao.key}
                                 mode="dropdown"
-                                style={{ height: 50, width: 100 }}
+                                style={{ height: 50, width: 200 }}
                                 onValueChange={(itemValue, itemIndex) =>
                                     this.setState({
                                         areaAtuacao: this.state.areas[itemIndex]

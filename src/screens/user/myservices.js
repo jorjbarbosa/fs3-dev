@@ -12,9 +12,9 @@ import firebase from 'react-native-firebase';
 db = firebase.firestore();
 export default class MyServices extends Component {
   constructor() {
-    super();
-    this.refServicos = firebase.firestore().collection('servicos');
+    super(); 
     this.refUsuario = firebase.firestore().collection('usuario');
+    this.refServicos = firebase.firestore().collection('servicos');
     this.state = {
       servicos: '',
       nome: '',
@@ -25,14 +25,17 @@ export default class MyServices extends Component {
   componentWillMount() {
     this.loadData();
   }
+  componentWillUpdate(){
+    this.loadData();
+  }
   loadData() {
     const services = [];
     const userRef = this.refUsuario.doc(firebase.auth().currentUser.uid);
     this.refServicos.where('proprietario', '==', userRef).get().then(snapshot => {
       snapshot.forEach(doc => {
         var obj = {};
-        const { descricao, localizacao, area, preco, pagamento, nota } = doc.data();
-
+        const { titulo, descricao, localizacao, area, preco, pagamento, nota } = doc.data();
+        obj.titulo = titulo;
         obj.descricao = descricao;
         obj.localizacao = localizacao;
         obj.preco = preco;
@@ -66,21 +69,34 @@ export default class MyServices extends Component {
       console.log('Error getting documents', err);
     });
   }
-  deleteService() {
+  deleteService(key) {
     Alert.alert(
       "AVISO",
       "Tem certeza que deseja excluir?",
       [
         {
-          text: 'Confirmar',
-          onPress: () => console.log("confirma")
-        },
-        {
           text: 'Cancelar',
           onPress: () => console.log("cancelar")
+        },
+        {
+          text: 'Confirmar',
+          onPress: () => this.delete(key)
         }
       ]
     );
+  }
+  delete(key) {
+    db.collection('servicos').doc(key).delete().then(function () {
+      Alert.alert(
+        "Tudo certo...",
+        'seu serviço foi deletado',
+        [{
+          text: 'OK'
+        }]
+      );
+    }).catch(function (err) {
+      Alert.alert(errorMessage(err));
+    });
   }
   renderCard = (item) => {
     const { navigation } = this.props;
@@ -91,7 +107,7 @@ export default class MyServices extends Component {
             source={require('../../assets/images/icons/distance.png')}
           />
           <Block style={styles.cargo} middle >
-            <Text h5 weight="bold">{item.descricao}</Text>
+            <Text h5 weight="bold">{item.titulo}</Text>
           </Block>
           <MaskText h5 style={styles.cargo} mask="money" value={item.preco} />
         </Block>
@@ -112,14 +128,13 @@ export default class MyServices extends Component {
         </Block>
         <Block row style={styles.stat}>
           <Block style={styles.stat2}>
-            {/* <Text paragraphGray onPress={()=>{this.props.navigation.navigate("EditService"),{service:item}}}> */}
             <Text paragraphGray onPress={() => { console.log(item) }} color="yellow"
-              onPress={() => navigation.navigate("EditMyServices")}>
+              onPress={() => navigation.navigate("EditMyServices", { service: item })}>
               Editar
             </Text>
           </Block>
           <Block style={styles.stat2}>
-            <Text paragraphGray onPress={() => { this.deleteService() }} color="red">
+            <Text paragraphGray onPress={() => { this.deleteService(item.key) }} color="red">
               Excluir
             </Text>
           </Block>
