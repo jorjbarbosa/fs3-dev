@@ -99,6 +99,7 @@ export default class MyServices extends Component {
     });
   }
   renderCard = (item) => {
+    //console.log(item);
     const { navigation } = this.props;
     return (
       <Card style={styles.card} >
