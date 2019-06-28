@@ -1,16 +1,40 @@
 import React, { Component } from "react";
 import Icon from "react-native-vector-icons/Entypo";
 import { Dimensions, ScrollView, StyleSheet, Image } from "react-native";
-import { Block, Text, Divider, Button } from '../../components';
+import { Block, Text, Divider, Button, MaskText } from '../../components';
 import { sizes, colors } from "../../components/theme";
 const { width, height } = Dimensions.get('window');
+import { errorMessage } from '../../config/Erros';
+import firebase from 'react-native-firebase';
 
+
+db = firebase.firestore();
 class Details extends Component {
+    constructor() {
+        super();
+        this.refUsuario = firebase.firestore().collection('usuario');
+        this.refServicos = firebase.firestore().collection('servicos');
+        this.state = {
+            service: '',
+            load: true,
+            refreshing: false
+        }
+    }
+    componentWillMount() {
+        this.setState({ service: this.props.navigation.state.params.service, load: false });
+    }
     render() {
+        if (this.state.load) {
+            return (
+                <View>
+                    <Text style={styles.item}></Text>
+                </View>
+            );
+        }
         return (
             <ScrollView showsVerticalScrollIndicator={false} >
                 <Image
-                    source={require('../../assets/images/icons/image.png')}
+                    // source={require('../../assets/images/icons/image.png')}
                     resizeMode="contain"
                     style={{ width, height: height / 2.8 }}
                 />
@@ -18,9 +42,9 @@ class Details extends Component {
                     <Block middle>
                         <Block row >
                             <Text h3 multiline={true}
-                                numberOfLines={5}>Prostituta</Text>
+                                numberOfLines={5}>{this.state.service.titulo}</Text>
                         </Block>
-                        <Text h3 weight="bold" multiline={true} style={{ marginLeft: 20 }} > R$30 Pau</Text>
+                        <MaskText h5 style={styles.cargo} mask="money" value={this.state.service.preco} />
                     </Block>
 
 
@@ -36,23 +60,20 @@ class Details extends Component {
                     </Block>
 
                     <Block flex={false} row middle>
-                        <Text caption style={styles.tag}><Icon name="credit-card" color="teal" size={15} /></Text>
-                        <Text caption style={styles.tag}><Icon name="credit" color="teal" size={15} /></Text>
-                        <Text caption style={styles.tag}><Icon name="star" color="purple" size={15} />1.5</Text>
+                        {this.state.service.pagamento.cartao ? <Icon name="credit-card" style={styles.tag} size={15} /> : null}
+                        {this.state.service.pagamento.dinheiro ? <Icon name="credit" style={styles.tag} size={15} /> : null}
+
+                        <Text paragraph>{this.state.service.nota}</Text>
                         <Text caption style={styles.tag}><Icon name="heart-outlined" color="red" size={15} /></Text>
                     </Block>
                     <Divider />
                     <Text semibold>Descrição</Text>
                     <Text color="gray" light height={22} >
-                        Condominhio e Casa
+                    {this.state.service.descricao}
 
                     </Text>
                     <Divider />
-                    <Text semibold>Certificações</Text>
-                    <Text color="gray" light height={22} >
-                        Condominhio e Casa
-
-                    </Text>
+                   
                     <Block style={styles.footer}>
                         <Button style={styles.btn}>
                             <Text bold color="white">
